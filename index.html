@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>装备制作系统</title>
+<title>宝物制作系统</title>
 <style>
 /* 异步加载 Google 字体，不阻塞渲染 */
 @font-face {
@@ -336,7 +336,7 @@ body {
   position: relative;
 }
 
-/* ============ 打造主界面 ============ */
+/* ============ 制作主界面 ============ */
 .forge-main-bg {
   flex: 1;
   background: url('bg.jpg') center bottom / cover no-repeat, linear-gradient(180deg, #3a2510 0%, #1a0f05 100%);
@@ -381,7 +381,7 @@ body {
   text-shadow: 0 1px 4px rgba(0,0,0,0.9); letter-spacing: 2px;
 }
 
-/* === 打造动画覆盖层 === */
+/* === 制作动画覆盖层 === */
 .forging-overlay {
   position: absolute; inset: 0;
   display: none;
@@ -761,7 +761,7 @@ body {
   margin-top: 6px;
 }
 
-/* ============ 装备选择界面 ============ */
+/* ============ 宝物选择界面 ============ */
 .select-body {
   flex: 1; display: flex; overflow: hidden;
 }
@@ -818,7 +818,7 @@ body {
   pointer-events: none; z-index: 2;
 }
 
-/* 可打造标记 */
+/* 可制作标记 */
 .craftable-badge {
   position: absolute; top: -4px; left: -4px;
   width: 22px; height: 22px;
@@ -1267,7 +1267,7 @@ body {
   object-fit: cover; z-index: 4;
   background: #2a2318;
 }
-/* 详情中的装备者信息 */
+/* 详情中的持有者信息 */
 .equipped-by {
   display: flex; align-items: center; gap: 6px;
   font-size: 13px; color: #8a7a58;
@@ -1328,7 +1328,7 @@ body {
   border: 2px solid #c8a84e;
 }
 
-/* ============ 装备分解界面 ============ */
+/* ============ 宝物分解界面 ============ */
 .decompose-screen {
   position: absolute; inset: 0; z-index: 80; display: none;
   flex-direction: column; background: #1a1408;
@@ -1460,17 +1460,16 @@ body {
   <div class="doc-panel" id="docPanel">
     <div class="doc-header">
       <div class="doc-header-row1">
-        <div class="doc-title">铁匠铺 · 装备制作系统</div>
+        <div class="doc-title">珍宝阁 · 宝物制作系统</div>
         <a class="doc-ref-btn" href="references.html">🖼️ 参考截图</a>
       </div>
       <div class="doc-header-row2">
         <span class="doc-nav-label">快速跳转：</span>
         <button class="doc-nav-btn active" data-screen="idle" onclick="demoGo('idle');scrollDocTo('idle')">主界面·空闲</button>
-        <button class="doc-nav-btn" data-screen="forging" onclick="demoGo('forging');scrollDocTo('forging')">打造/强化中</button>
+        <button class="doc-nav-btn" data-screen="forging" onclick="demoGo('forging');scrollDocTo('forging')">制作中</button>
         <button class="doc-nav-btn" data-screen="complete" onclick="demoGo('complete');scrollDocTo('complete')">完成收取</button>
-        <button class="doc-nav-btn" data-screen="select" onclick="demoGo('select');scrollDocTo('select')">装备选择·打造</button>
-        <button class="doc-nav-btn" data-screen="select-upgrade" onclick="demoGo('select-upgrade');scrollDocTo('select-upgrade')">装备选择·强化</button>
-        <button class="doc-nav-btn" data-screen="decompose" onclick="demoGo('decompose');scrollDocTo('decompose')">装备分解</button>
+        <button class="doc-nav-btn" data-screen="select" onclick="demoGo('select');scrollDocTo('select')">宝物选择·制作</button>
+        <button class="doc-nav-btn" data-screen="decompose" onclick="demoGo('decompose');scrollDocTo('decompose')">宝物分解</button>
         <button class="doc-nav-btn" data-screen="help" onclick="demoGo('help');scrollDocTo('help')">帮助弹窗</button>
       </div>
     </div>
@@ -1478,195 +1477,196 @@ body {
 
       <div class="doc-chapter">
         <h2 class="doc-h2">一、系统概述</h2>
-        <p>装备制作系统是新增<b>铁匠铺</b>建筑的核心功能之一。玩家通过收集材料、消耗图纸，在铁匠铺内打造或强化各类装备，将装备佩戴给麾下武将以提升战力。</p>
-        <p>本系统包含三个子功能：<b>装备打造</b>、<b>装备强化</b>、<b>装备分解</b>。铁匠铺同一时间只能执行一个打造或强化任务，分解操作独立运行、不占用任务槽。</p>
+        <p>宝物制作系统是<b>珍宝阁</b>建筑的核心功能之一。玩家通过收集材料、消耗图纸，在珍宝阁内制作各类宝物，将宝物佩戴给麾下武将以提升战力。</p>
+        <p>本系统包含两个子功能：<b>宝物制作</b>、<b>宝物分解</b>。分解操作独立运行、不占用任务槽。</p>
         <h3 class="doc-h3">本版本大方向改动</h3>
         <ul class="doc-list">
-          <li><b>原兵装系统整体删除</b>。原兵装系统所使用的背景图被复用为本装备制作系统的背景图。</li>
-          <li><b>新增铁匠铺建筑</b>，铁匠铺提供两个功能入口：<b>「装备制作」</b>（本文档所述内容）和<b>「装备详情」</b>（查看装备属性信息的独立界面，另行说明）。</li>
-          <li><b>解锁方式调整</b>：装备的打造/强化权限从绑定主公等级改为绑定<b>铁匠铺等级</b>，铁匠铺升级即可解锁更高品质的装备。</li>
+          <li><b>原兵装系统整体删除</b>。原兵装系统所使用的背景图被复用为本宝物制作系统的背景图。</li>
+          <li><b>珍宝阁</b>提供两个功能入口：<b>「宝物制作」</b>（本文档所述内容）和<b>「宝物详情」</b>（查看宝物属性信息的独立界面，另行说明）。</li>
+          <li><b>宝物解锁方式</b>：宝物的制作权限绑定<b>珍宝阁等级</b>，珍宝阁升级即可解锁更高品质的宝物。</li>
         </ul>
       </div>
 
       <div class="doc-chapter">
         <h2 class="doc-h2">二、系统入口</h2>
-        <p>入口路径：封地主界面 → 点击<b>铁匠铺</b>建筑 → 铁匠铺弹窗内点击<b>「装备制作」</b>按钮 → 进入装备制作主界面。</p>
-        <p>铁匠铺弹窗提供两个按钮：<b>「装备制作」</b>（进入本系统）和<b>「装备详情」</b>（查看当前装备信息，为独立功能，本文不作说明）。</p>
+        <p>入口路径：封地主界面 → 点击<b>珍宝阁</b>建筑 → 珍宝阁弹窗内点击<b>「宝物制作」</b>按钮 → 进入宝物制作主界面。</p>
+        <p>珍宝阁弹窗提供两个按钮：<b>「宝物制作」</b>（进入本系统）和<b>「宝物详情」</b>（查看当前宝物信息，为独立功能，本文不作说明）。</p>
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2">三、铁匠铺建筑与升级</h2>
-        <h3 class="doc-h3">3.1 铁匠铺升级</h3>
-        <p>铁匠铺本身可以升级。升级后可以解锁更高品质装备的打造和强化权限。各品质装备对应的铁匠铺解锁等级由配表配置，原型中以"铁匠铺 X 级解锁"标注。</p>
+        <h2 class="doc-h2">三、珍宝阁建筑与升级</h2>
+        <h3 class="doc-h3">3.1 珍宝阁升级</h3>
+        <p>珍宝阁本身可以升级。升级后可以解锁更高品质宝物的制作权限。各品质宝物对应的珍宝阁解锁等级由配表配置，原型中以"珍宝阁 X 级解锁"标注。</p>
         <h3 class="doc-h3">3.2 升级方式</h3>
-        <p>铁匠铺的升级方式（建设度/资源消耗/升级时间等）待定，另行说明。</p>
-        <h3 class="doc-h3">3.3 未解锁装备的展示</h3>
-        <p>当铁匠铺等级不足时，对应品质的装备在打造列表中以<b>半透明 + 锁图标 + "铁匠铺 X 级解锁"</b>文字展示，玩家可查看详情但无法发起打造或强化。</p>
+        <p>珍宝阁的升级方式（建设度/资源消耗/升级时间等）待定，另行说明。</p>
+        <h3 class="doc-h3">3.3 未解锁宝物的展示</h3>
+        <p>当珍宝阁等级不足时，对应品质的宝物在制作列表中以<b>半透明 + 锁图标 + "珍宝阁 X 级解锁"</b>文字展示，玩家可查看详情但无法发起制作。</p>
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2">四、装备体系</h2>
-        <h3 class="doc-h3">4.1 装备分类</h3>
-        <p>装备共分 5 个类型：<b>武器、坐骑、令符、奇珍、宝典</b>。每种类型有 5 个品质等级，共计 25 种装备。</p>
-        <p style="color:#888;font-size:13px;font-family:'Microsoft YaHei',sans-serif;">📄 备注：每种类型各品质的具体装备名称及对应图标，将在独立的《装备名称与图标对照表》文档中提供，此处不作列举。</p>
+        <h2 class="doc-h2">四、宝物体系</h2>
+        <h3 class="doc-h3">4.1 宝物分类</h3>
+        <p>宝物共分 5 个类型：<b>武器、坐骑、令符、奇珍、宝典</b>。每种类型有 5 个品质等级，共计 25 种宝物。</p>
+        <p style="color:#888;font-size:13px;font-family:'Microsoft YaHei',sans-serif;">📄 备注：每种类型各品质的具体宝物名称及对应图标，将在独立的《宝物名称与图标对照表》文档中提供，此处不作列举。</p>
         <h3 class="doc-h3">4.2 品质体系</h3>
-        <p>品质由低到高依次为：<b>白色 → 绿色 → 蓝色 → 紫色 → 橙色</b>。品质决定装备的基础属性上限、刻蚀品质上限、洗炼词条上限，以及解锁所需的铁匠铺等级。低品质装备可通过"装备强化"功能升一级品质，每次只能升一级。</p>
-        <h3 class="doc-h3">4.3 装备属性</h3>
-        <p>每件装备拥有若干条基础属性（如攻击、防御、带兵等），属性条数和数值随品质提升而增加，均为<b>固定值</b>，非随机生成。高品质装备必然拥有低品质装备的全部属性，并在此基础上增加新属性或提升数值。</p>
+        <p>品质由低到高依次为：<b>白色 → 绿色 → 蓝色 → 紫色 → 橙色</b>。品质决定宝物的基础属性上限、刻蚀品质上限、洗炼词条上限，以及解锁所需的珍宝阁等级。</p>
+        <h3 class="doc-h3">4.3 宝物属性</h3>
+        <p>每件宝物拥有若干条基础属性（如攻击、防御、带兵等），属性条数和数值随品质提升而增加，均为<b>固定值</b>，非随机生成。高品质宝物必然拥有低品质宝物的全部属性，并在此基础上增加新属性或提升数值。</p>
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2" id="doc-idle">五、铁匠铺主界面 <button class="doc-screen-btn" onclick="demoGo('idle')">&#9654; 查看原型</button></h2>
-        <p>主界面是进入装备制作系统后的默认界面，根据铁匠铺当前状态分为三种显示模式。</p>
+        <h2 class="doc-h2" id="doc-idle">五、珍宝阁主界面 <button class="doc-screen-btn" onclick="demoGo('idle')">&#9654; 查看原型</button></h2>
+        <p>主界面是进入宝物制作系统后的默认界面，根据珍宝阁当前状态分为三种显示模式。</p>
         <h3 class="doc-h3">5.1 空闲状态</h3>
         <ul class="doc-list">
-          <li>中央显示一个<b>「+」加号按钮</b>，点击后界面向左滑出，装备选择界面从右侧滑入。</li>
-          <li>顶栏显示标题<b>「装备制作」</b>，右上角有<b>「?」</b>帮助按钮，点击打开帮助说明弹窗。</li>
-          <li>底栏有<b>返回</b>按钮，点击返回封地主界面。</li>
+          <li>中央显示一个<b>「+」加号按钮</b>，点击后界面向左滑出，宝物选择界面从右侧滑入。</li>
+          <li>顶栏显示标题<b>「宝物制作」</b>，右上角有<b>「?」</b>帮助按钮，点击打开帮助说明弹窗。</li>
+          <li>底栏左侧有<b>返回</b>按钮，点击返回封地主界面；右侧有<b>「宝物分解」</b>按钮，无论当前是空闲、制作中还是完成待收取，均可点击进入分解界面。</li>
         </ul>
-        <h3 class="doc-h3" id="doc-forging">5.2 打造 / 强化进行中 <button class="doc-screen-btn" onclick="demoGo('forging')">&#9654; 查看原型</button></h3>
+        <h3 class="doc-h3" id="doc-forging">5.2 制作进行中 <button class="doc-screen-btn" onclick="demoGo('forging')">&#9654; 查看原型</button></h3>
         <ul class="doc-list">
-          <li>中央<b>锻造圆环</b>内显示目标装备图标（品质边框 + 类型图标）。圆环播放锻造动画：两把锤子交替敲击 + 多层火花粒子 + 撞击闪光 + 热力光晕 + 烟雾效果。</li>
-          <li>装备名称显示于圆环正下方，属性信息在名称下方展示。强化任务时，属性区域显示<b>属性对比</b>（强化前 → 强化后）。</li>
+          <li>中央<b>锻造圆环</b>内显示目标宝物图标（品质边框 + 类型图标）。圆环播放锻造动画：两把锤子交替敲击 + 多层火花粒子 + 撞击闪光 + 热力光晕 + 烟雾效果。</li>
+          <li>宝物名称显示于圆环正下方，属性信息在名称下方展示。</li>
           <li>再往下是<b>进度条 + 剩余时间倒计时</b>，实时更新。</li>
           <li>进度条下方两个操作按钮：
             <ul>
-              <li><b>「打造列表」/「强化列表」</b>：点击后界面滑回装备选择界面，当前任务<b>不中断</b>、继续计时。</li>
-              <li><b>「加速打造」/「加速强化」</b>：调用游戏通用加速弹窗组件，玩家使用加速道具后任务立即完成，跳转至完成状态。</li>
+              <li><b>「制作列表」</b>：点击后界面滑回宝物选择界面，当前任务<b>不中断</b>、继续计时。</li>
+              <li><b>「加速制作」</b>：调用游戏通用加速弹窗组件，玩家使用加速道具后任务立即完成，跳转至完成状态。</li>
             </ul>
           </li>
         </ul>
         <h3 class="doc-h3" id="doc-complete">5.3 完成收取 <button class="doc-screen-btn" onclick="demoGo('complete')">&#9654; 查看原型</button></h3>
         <ul class="doc-list">
           <li>锻造圆环停止旋转，播放<b>完成光效</b>：中心爆发光圈扩散 + 向外放射 12 道光芒。</li>
-          <li>界面显示<b>「打造完成」</b>或<b>「强化完成」</b>文字提示。</li>
-          <li>显示<b>「收 取」</b>按钮。点击后触发<b>通用道具获得界面</b>（外部通用组件），关闭后主界面回到空闲状态，对应装备数量 +1。</li>
+          <li>界面显示<b>「制作完成」</b>文字提示。</li>
+          <li>显示<b>「收 取」</b>按钮。点击后触发<b>通用道具获得界面</b>（外部通用组件），关闭后主界面回到空闲状态，对应宝物数量 +1。</li>
           <li>完成状态<b>会一直保持</b>直到玩家主动点击收取。玩家可离开后再回来，仍然看到待收取状态。</li>
-          <li>完成状态下无法开始新的打造/强化，必须收取后才能再次使用铁匠铺。</li>
+          <li>完成状态下无法开始新的制作，必须收取后才能再次使用珍宝阁。</li>
         </ul>
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2" id="doc-select">六、装备打造 <button class="doc-screen-btn" onclick="demoGo('select')">&#9654; 查看原型</button></h2>
-        <h3 class="doc-h3">6.1 打造条件</h3>
+        <h2 class="doc-h2" id="doc-select">六、宝物制作 <button class="doc-screen-btn" onclick="demoGo('select')">&#9654; 查看原型</button></h2>
+        <h3 class="doc-h3">6.1 制作条件</h3>
         <ul class="doc-list">
-          <li><b>铁匠铺等级</b>：部分高品质装备需要铁匠铺达到一定等级才能解锁；未解锁装备以半透明+锁图标+所需等级展示，不可发起打造。</li>
-          <li><b>指定材料</b>：每件装备的材料需求固定，材料不足时打造按钮不可点击。</li>
-          <li><b>图纸</b>：消耗 1 张该装备对应的图纸，图纸作为普通道具与其他材料一同在材料列表中展示。</li>
-          <li>铁匠铺<b>没有正在进行的任务</b>；有任务时按钮置灰显示当前任务状态。</li>
+          <li><b>珍宝阁等级</b>：部分高品质宝物需要珍宝阁达到一定等级才能解锁；未解锁宝物以半透明+锁图标+所需等级展示，不可发起制作。</li>
+          <li><b>指定材料</b>：每件宝物的材料需求固定，材料不足时制作按钮不可点击。</li>
+          <li><b>图纸</b>：消耗 1 张该宝物对应的图纸，图纸作为普通道具与其他材料一同在材料列表中展示。</li>
+          <li>珍宝阁<b>没有正在进行的任务</b>；有任务时按钮置灰显示当前任务状态。</li>
         </ul>
-        <h3 class="doc-h3">6.2 装备选择界面（打造模式）</h3>
+        <h3 class="doc-h3">6.2 宝物选择界面（制作模式）</h3>
         <ul class="doc-list">
-          <li>界面分为左侧<b>装备列表</b>和右侧<b>装备详情</b>两栏布局。</li>
-          <li>底部导航栏：左侧返回箭头、中间「打造」/「强化」分页标签、右侧「装备分解」入口。</li>
-          <li>顶部提供<b>品质筛选</b>和<b>类型筛选</b>，可组合使用，过滤列表显示的装备。</li>
+          <li>界面分为左侧<b>宝物列表</b>和右侧<b>宝物详情</b>两栏布局。</li>
+          <li>底部导航栏：左侧返回箭头。</li>
         </ul>
-        <h3 class="doc-h3">6.3 装备列表规则</h3>
-        <p>列表展示全部 25 件可打造装备，排序逻辑（优先级由高到低）：</p>
+        <h3 class="doc-h3">6.3 宝物列表规则</h3>
+        <p>列表展示全部 25 件可制作宝物，排序逻辑（优先级由高到低）：</p>
         <ol class="doc-list">
-          <li><b>材料充足可立即打造</b>：排最前，图标上显示绿色锤子标记。</li>
+          <li><b>材料充足可立即制作</b>：排最前，图标上显示绿色锤子标记。</li>
           <li><b>已解锁但材料不足</b>：正常显示，无特殊标记。</li>
-          <li><b>未解锁（铁匠铺等级不足）</b>：半透明 + 锁图标 + 解锁所需等级文字。</li>
+          <li><b>未解锁（珍宝阁等级不足）</b>：半透明 + 锁图标 + 解锁所需等级文字。</li>
         </ol>
-        <p>同优先级内，按品质从高到低，再按类型顺序排序。装备图标左下角显示<b>当前持有数量</b>（数量≥1 时显示）。</p>
-        <h3 class="doc-h3">6.4 装备详情面板</h3>
+        <p>同优先级内，按品质从高到低，再按类型顺序排序。宝物图标左下角显示<b>当前持有数量</b>（数量≥1 时显示）。</p>
+        <h3 class="doc-h3">6.4 宝物详情面板</h3>
         <ul class="doc-list">
-          <li>装备品质边框 + 类型图标（大图）、装备名称</li>
+          <li>宝物品质边框 + 类型图标（大图）、宝物名称</li>
           <li>全部基础属性列表</li>
-          <li>刻蚀上限（该品质装备可容纳的刻蚀品质上限）</li>
+          <li>刻蚀上限（该品质宝物可容纳的刻蚀品质上限）</li>
           <li>洗炼上限（该品质可开启的洗炼词条条数）</li>
           <li>材料需求列表（含图纸），点击任意道具图标 → 调用<b>通用道具弹窗</b>（外部组件）</li>
-          <li>预计打造时间</li>
-          <li><b>「打造装备」</b>按钮：确认后立即扣除材料，界面滑回主界面并进入打造进行中状态</li>
+          <li>预计制作时间</li>
+          <li><b>「制作宝物」</b>按钮：确认后立即扣除材料，界面滑回主界面并进入制作进行中状态</li>
         </ul>
-        <h3 class="doc-h3">6.5 打造完整流程</h3>
-        <p>点击「打造装备」→ 扣除材料（含图纸）→ 主界面切换为进行中 → 倒计时结束 → 切换为完成状态 → 玩家点击「收取」→ 弹出通用道具获得界面 → 关闭后，装备进入背包（数量+1），主界面回到空闲状态。</p>
+        <h3 class="doc-h3">6.5 制作完整流程</h3>
+        <p>点击「制作宝物」→ 扣除材料（含图纸）→ 主界面切换为进行中 → 倒计时结束 → 切换为完成状态 → 玩家点击「收取」→ 弹出通用道具获得界面 → 关闭后，宝物进入背包（数量+1），主界面回到空闲状态。</p>
       </div>
 
+      <!-- 宝物强化章节已移除（2026-04-22），内容备份在 upgrade-removed.html -->
+      <!--
       <div class="doc-chapter">
-        <h2 class="doc-h2" id="doc-select-upgrade">七、装备强化 <button class="doc-screen-btn" onclick="demoGo('select-upgrade')">&#9654; 查看原型</button></h2>
+        <h2 class="doc-h2" id="doc-select-upgrade">七、宝物强化</h2>
         <h3 class="doc-h3">7.1 强化概念</h3>
-        <p>装备强化的本质是将玩家已持有的一件低品质装备"升级"为高一级品质的同类型装备。强化时，<b>消耗原装备 1 件</b>，并消耗图纸和材料，完成后生成下一品质的同类装备。强化方向为品质直升：白→绿→蓝→紫→橙，每次只能升一个等级，橙色为最高品质不可继续强化。</p>
+        <p>宝物强化的本质是将玩家已持有的一件低品质宝物"升级"为高一级品质的同类型宝物。强化时，<b>消耗原宝物 1 件</b>，并消耗图纸和材料，完成后生成下一品质的同类宝物。强化方向为品质直升：白→绿→蓝→紫→橙，每次只能升一个等级，橙色为最高品质不可继续强化。</p>
         <h3 class="doc-h3">7.2 强化条件</h3>
         <ul class="doc-list">
-          <li>背包中持有 1 件对应的低品质装备（强化开始时消耗）。</li>
+          <li>背包中持有 1 件对应的低品质宝物（强化开始时消耗）。</li>
           <li>对应的图纸 × 1（消耗）。</li>
-          <li>所需的强化材料（种类和数量固定，通常多于打造同品质装备所需）。</li>
-          <li>铁匠铺等级满足目标品质装备的解锁要求。</li>
+          <li>所需的强化材料（种类和数量固定，通常多于制作同品质宝物所需）。</li>
+          <li>铁匠铺等级满足目标品质宝物的解锁要求。</li>
           <li>铁匠铺当前无正在执行的任务。</li>
         </ul>
         <h3 class="doc-h3">7.3 强化列表规则</h3>
         <ul class="doc-list">
-          <li>强化列表展示<b>玩家当前持有（count≥1）且存在更高品质版本</b>的装备。</li>
-          <li>列表显示的是<b>当前持有的装备</b>（不是目标装备），方便玩家找到手里有的装备。</li>
-          <li><b>铁匠铺等级不足以解锁目标品质</b>的强化项不出现在列表（不同于打造列表会显示锁定项）。</li>
-          <li>若武将正在佩戴某件装备，该装备图标左上角显示<b>武将头像标记</b>。</li>
-          <li>顶部提供<b>「武将筛选」</b>按钮，可过滤只显示某位武将装备中的装备。</li>
+          <li>强化列表展示<b>玩家当前持有（count≥1）且存在更高品质版本</b>的宝物。</li>
+          <li>列表显示的是<b>当前持有的宝物</b>（不是目标宝物），方便玩家找到手里有的宝物。</li>
+          <li><b>铁匠铺等级不足以解锁目标品质</b>的强化项不出现在列表（不同于制作列表会显示锁定项）。</li>
+          <li>若武将正在佩戴某件宝物，该宝物图标左上角显示<b>武将头像标记</b>。</li>
+          <li>顶部提供<b>「武将筛选」</b>按钮，可过滤只显示某位武将持有的宝物。</li>
         </ul>
         <h3 class="doc-h3">7.4 强化详情面板</h3>
         <ul class="doc-list">
           <li><b>品质图标对比</b>：左侧当前品质图标 → 箭头 → 右侧目标品质图标</li>
-          <li><b>装备名称对比</b>：当前名称 → 强化后名称</li>
-          <li>若武将正在佩戴该装备，显示武将头像 + 武将名称</li>
+          <li><b>宝物名称对比</b>：当前名称 → 强化后名称</li>
+          <li>若武将正在佩戴该宝物，显示武将头像 + 武将名称</li>
           <li><b>属性对比</b>：每条属性显示「旧值 → 新值」，新值颜色高亮</li>
-          <li>刻蚀：显示当前装备已有的刻蚀情况；强化后刻蚀不丢失，刻蚀品质上限随品质提升</li>
+          <li>刻蚀：显示当前宝物已有的刻蚀情况；强化后刻蚀不丢失，刻蚀品质上限随品质提升</li>
           <li>洗炼上限对比：旧上限条数 → 新上限条数</li>
-          <li>材料需求（含图纸，<b>不包含</b>被消耗的低品质装备本身）</li>
+          <li>材料需求（含图纸，<b>不包含</b>被消耗的低品质宝物本身）</li>
           <li>预计强化时间</li>
-          <li><b>「强化装备」</b>按钮</li>
+          <li><b>「强化宝物」</b>按钮</li>
         </ul>
-        <h3 class="doc-h3">7.5 强化后的装备归属</h3>
-        <p>若被强化的装备正在被武将佩戴，强化完成并收取后，武将<b>自动换装</b>为强化后的新装备（佩戴关系保持，装备更新为高品质版本）。</p>
-        <h3 class="doc-h3">7.6 强化与打造的共同规则</h3>
-        <p>强化的整体流程与打造相同：确认→扣除材料→进行中→完成→收取。两者共用同一个铁匠铺任务槽，同时只能进行一种操作。</p>
+        <h3 class="doc-h3">7.5 强化后的宝物归属</h3>
+        <p>若被强化的宝物正在被武将佩戴，强化完成并收取后，武将<b>自动换装</b>为强化后的新宝物（佩戴关系保持，宝物更新为高品质版本）。</p>
+        <h3 class="doc-h3">7.6 强化与制作的共同规则</h3>
+        <p>强化的整体流程与制作相同：确认→扣除材料→进行中→完成→收取。两者共用同一个铁匠铺任务槽，同时只能进行一种操作。</p>
+      </div>
+      -->
+
+      <div class="doc-chapter">
+        <h2 class="doc-h2">七、宝物刻蚀（与本系统的交互部分）</h2>
+        <p>刻蚀系统属于独立的子系统，本文档仅说明其与宝物制作系统的交互关系。</p>
+        <h3 class="doc-h3">7.1 刻蚀品质上限</h3>
+        <p>每件宝物有一个<b>刻蚀品质上限</b>，由宝物品质决定。在宝物制作的详情面板中，刻蚀行显示的是该宝物可容纳的刻蚀品质上限（白色宝物显示"白色"，绿色宝物显示"绿色"，依此类推）。</p>
+        <!-- 7.2 强化时刻蚀的继承（随强化功能一同移除，备份见 upgrade-removed.html） -->
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2">八、装备刻蚀（与本系统的交互部分）</h2>
-        <p>刻蚀系统属于独立的子系统，本文档仅说明其与装备制作系统的交互关系。</p>
-        <h3 class="doc-h3">8.1 刻蚀品质上限</h3>
-        <p>每件装备有一个<b>刻蚀品质上限</b>，由装备品质决定。在装备打造的详情面板中，刻蚀行显示的是该装备可容纳的刻蚀品质上限（白色装备显示"白色"，绿色装备显示"绿色"，依此类推）。</p>
-        <h3 class="doc-h3">8.2 强化时刻蚀的继承</h3>
-        <p>装备强化时，原装备上已有的刻蚀<b>自动转移</b>到强化后的新装备上，不会丢失。同时，新装备的刻蚀品质上限随品质提升，之前受限的刻蚀词条可以进一步强化。</p>
-      </div>
-
-      <div class="doc-chapter">
-        <h2 class="doc-h2" id="doc-decompose">九、装备分解 <button class="doc-screen-btn" onclick="demoGo('decompose')">&#9654; 查看原型</button></h2>
-        <h3 class="doc-h3">9.1 分解入口</h3>
-        <p>入口位于装备选择界面底部导航栏右侧<b>「装备分解」</b>按钮。分解功能不占用铁匠铺任务槽，可在打造/强化进行中时操作。</p>
-        <h3 class="doc-h3">9.2 分解界面</h3>
+        <h2 class="doc-h2" id="doc-decompose">八、宝物分解 <button class="doc-screen-btn" onclick="demoGo('decompose')">&#9654; 查看原型</button></h2>
+        <h3 class="doc-h3">8.1 分解入口</h3>
+        <p>入口位于宝物制作<b>主界面</b>底部导航栏右侧<b>「宝物分解」</b>按钮。无论当前是空闲、制作中还是完成待收取状态，均可点击进入。分解功能不占用珍宝阁任务槽，与制作互不影响。</p>
+        <h3 class="doc-h3">8.2 分解界面</h3>
         <ul class="doc-list">
-          <li>以网格形式展示所有<b>可分解的装备</b>：未被武将佩戴、无刻蚀、且持有数量≥1 的装备。<b>有刻蚀的装备不可分解</b>，不出现在分解列表中。</li>
+          <li>以网格形式展示所有<b>可分解的宝物</b>：未被武将佩戴、无刻蚀、且持有数量≥1 的宝物。<b>有刻蚀的宝物不可分解</b>，不出现在分解列表中。</li>
           <li>顶部<b>品质筛选下拉</b>：可选择分解品质范围。</li>
-          <li>玩家<b>点击单件装备</b>选中/取消选中，已选中装备高亮显示。</li>
-          <li><b>「一键选中」</b>按钮：按当前品质筛选，自动选中所有符合条件的装备，最多 15 件。</li>
-          <li>右侧实时显示<b>预计返还材料</b>列表（根据选中装备累加计算）。</li>
+          <li>玩家<b>点击单件宝物</b>选中/取消选中，已选中宝物高亮显示。</li>
+          <li><b>「一键选中」</b>按钮：按当前品质筛选，自动选中所有符合条件的宝物，最多 15 件。</li>
+          <li>右侧实时显示<b>预计返还材料</b>列表（根据选中宝物累加计算）。</li>
         </ul>
-        <h3 class="doc-h3">9.3 确认分解</h3>
+        <h3 class="doc-h3">8.3 确认分解</h3>
         <ul class="doc-list">
-          <li>点击<b>「分 解」</b>按钮后，所有选中装备立即销毁，每件装备返还的材料由配表决定，返还材料自动入背包。</li>
-          <li>被武将佩戴的装备、有刻蚀的装备均不出现在分解列表，无法被选中。</li>
+          <li>点击<b>「分 解」</b>按钮后，所有选中宝物立即销毁，每件宝物返还的材料由配表决定，返还材料自动入背包。</li>
+          <li>被武将佩戴的宝物、有刻蚀的宝物均不出现在分解列表，无法被选中。</li>
           <li>分解操作<b>不可撤销</b>，执行前需玩家确认。</li>
         </ul>
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2" id="doc-help">十、帮助弹窗 <button class="doc-screen-btn" onclick="demoGo('help')">&#9654; 查看原型</button></h2>
-        <p>点击主界面或装备选择界面右上角<b>「?」</b>按钮，弹出帮助说明弹窗，覆盖当前界面。弹窗以纯文字形式说明本系统基本操作，供玩家快速查阅。弹窗可随时关闭，返回原界面，不影响当前任务状态。</p>
+        <h2 class="doc-h2" id="doc-help">九、帮助弹窗 <button class="doc-screen-btn" onclick="demoGo('help')">&#9654; 查看原型</button></h2>
+        <p>点击主界面或宝物选择界面右上角<b>「?」</b>按钮，弹出帮助说明弹窗，覆盖当前界面。弹窗以纯文字形式说明本系统基本操作，供玩家快速查阅。弹窗可随时关闭，返回原界面，不影响当前任务状态。</p>
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2">十一、通用规则与限制</h2>
+        <h2 class="doc-h2">十、通用规则与限制</h2>
         <ul class="doc-list">
-          <li>铁匠铺<b>同时只能进行一个</b>打造或强化任务，不可并行。</li>
-          <li>分解操作不占用任务槽，可在打造/强化期间操作。</li>
+          <li>珍宝阁<b>同时只能进行一个</b>制作任务。</li>
+          <li>分解操作不占用任务槽，可在制作期间操作。</li>
           <li>加速功能调用<b>游戏通用加速弹窗组件</b>（外部实现），加速后任务立即完成。</li>
           <li>材料/图纸道具点击调用<b>通用道具弹窗组件</b>（外部实现），不在本系统内实现。</li>
-          <li>收取装备时调用<b>通用道具获得界面</b>（外部实现）。</li>
-          <li>武将佩戴状态由武将系统维护，本系统仅读取「装备是否被佩戴」及「佩戴武将信息（头像/名称）」。</li>
-          <li>所有打造/强化进度均为<b>真实倒计时</b>，玩家离线后继续计时，下次进入自动刷新状态。</li>
-          <li>图纸作为普通消耗道具，由道具背包系统管理，打造/强化时扣除背包中对应图纸数量。</li>
-          <li>装备持有数量无上限。</li>
+          <li>收取宝物时调用<b>通用道具获得界面</b>（外部实现）。</li>
+          <li>武将佩戴状态由武将系统维护，本系统仅读取「宝物是否被佩戴」及「佩戴武将信息（头像/名称）」。</li>
+          <li>所有制作进度均为<b>真实倒计时</b>，玩家离线后继续计时，下次进入自动刷新状态。</li>
+          <li>图纸作为普通消耗道具，由道具背包系统管理，制作时扣除背包中对应图纸数量。</li>
+          <li>宝物持有数量无上限。</li>
         </ul>
       </div>
 
@@ -1675,10 +1675,10 @@ body {
 <div class="game-container">
 
   <!-- 右侧旧UI对比面板（在game-container后） -->
-  <!-- ====== 画面1: 打造主界面 ====== -->
+  <!-- ====== 画面1: 制作主界面 ====== -->
   <div class="screen" id="screenMain">
     <div class="top-bar">
-      <span class="title">装备制作</span>
+      <span class="title">宝物制作</span>
       <button class="help-btn" onclick="showHelp()">?</button>
     </div>
 
@@ -1688,10 +1688,10 @@ body {
         <button class="forge-add-btn" onclick="goToSelect()">
           <span class="plus"><img src="btn_add.png" alt="+"></span>
         </button>
-        <div class="forge-add-label">装备制作</div>
+        <div class="forge-add-label">宝物制作</div>
       </div>
 
-      <!-- 打造中/完成 覆盖层 -->
+      <!-- 制作中/完成 覆盖层 -->
       <div class="forging-overlay" id="forgingOverlay">
         <div class="forge-ring" id="forgeRing">
           <div class="heat-glow"></div>
@@ -1716,8 +1716,8 @@ body {
           </div>
         </div>
         <div class="forge-action-bar" id="forgingBtns" style="display:none">
-          <button class="action-btn gold-btn" onclick="goToSelect()">打造列表</button>
-          <button class="action-btn purple-btn" onclick="speedForge()">加速打造</button>
+          <button class="action-btn gold-btn" onclick="goToSelect()">制作列表</button>
+          <button class="action-btn purple-btn" onclick="speedForge()">加速制作</button>
         </div>
 
         <!-- 完成（简单样式，强化用） -->
@@ -1725,9 +1725,9 @@ body {
         <div id="collectArea" style="display:none;margin-top:16px">
           <button class="action-btn green-btn" onclick="collectItem()">收 取</button>
         </div>
-        <!-- 完成/成功结果（打造用） -->
+        <!-- 完成/成功结果（制作用） -->
         <div class="forge-success-panel" id="forgeSuccessPanel" style="display:none">
-          <div class="success-title" id="successTitle">打造完成</div>
+          <div class="success-title" id="successTitle">制作完成</div>
           <div class="success-equip-header">
             <div class="success-equip-icon" id="successEquipIcon"></div>
             <div class="success-equip-name" id="successEquipName"></div>
@@ -1743,13 +1743,17 @@ body {
       <div class="back-btn" onclick="showToast('返回主城')">
         <div class="icon"></div>
       </div>
+      <div class="matel-btn" onclick="openDecompose()">
+        <div class="icon"></div>
+        <span class="text">宝物分解</span>
+      </div>
     </div>
   </div>
 
-  <!-- ====== 画面2: 装备选择界面 ====== -->
+  <!-- ====== 画面2: 宝物选择界面 ====== -->
   <div class="screen hidden-right" id="screenSelect">
     <div class="top-bar">
-      <span class="title">装备制作</span>
+      <span class="title">宝物制作</span>
       <button class="help-btn" onclick="showHelp()">?</button>
     </div>
 
@@ -1769,15 +1773,7 @@ body {
       <div class="back-btn" onclick="backToMain()">
         <div class="icon"></div>
       </div>
-      <div class="bottom-tabs">
-        <button class="bottom-tab active" id="tabForge" onclick="switchTab('forge')">打造</button>
-        <div class="bottom-tab-divider"></div>
-        <button class="bottom-tab" id="tabUpgrade" onclick="switchTab('upgrade')">强化</button>
-      </div>
-      <div class="matel-btn" onclick="openDecompose()">
-        <div class="icon"></div>
-        <span class="text">装备分解</span>
-      </div>
+      <!-- 分页标签已移除（仅剩制作，无需标签） -->
     </div>
   </div>
   <!-- 武将筛选弹窗 -->
@@ -1793,14 +1789,14 @@ body {
     </div>
   </div>
 
-  <!-- 装备分解界面 -->
+  <!-- 宝物分解界面 -->
   <div class="decompose-screen" id="decomposeScreen">
     <div class="decompose-top-bar">
-      <span class="title">装备分解</span>
+      <span class="title">宝物分解</span>
     </div>
     <div class="decompose-body">
       <div class="decompose-equip-area">
-        <div class="area-title">选择要分解的装备（已刻蚀的装备不可分解）</div>
+        <div class="area-title">选择要分解的宝物（已刻蚀的宝物不可分解）</div>
         <div class="decompose-grid" id="decomposeGrid"></div>
       </div>
       <div class="decompose-result-area">
@@ -1878,7 +1874,7 @@ const MATERIALS_INFO = {
   '木材': { quality:'white', desc:'常见木材。', source:'伐木场' },
   '皮革': { quality:'white', desc:'鞣制的动物皮革。', source:'皮革作坊' },
   '马料': { quality:'white', desc:'精选饲料。', source:'牧场' },
-  '图纸': { quality:'blue', desc:'装备制作工艺图纸。', source:'击败流寇' },
+  '图纸': { quality:'blue', desc:'宝物制作工艺图纸。', source:'击败流寇' },
   '玉石': { quality:'green', desc:'珍贵玉石。', source:'玉石矿场' },
   '丝绸': { quality:'green', desc:'上等蚕丝丝绸。', source:'织造坊' },
   '兽骨': { quality:'white', desc:'猎取的兽骨。', source:'狩猎场' },
@@ -1894,7 +1890,7 @@ const HEROES = [
   { name:'诸葛亮', avatar:'hero_10031006_0.png' },
 ];
 
-// ============ 装备数据（5类×5品质=25件） ============
+// ============ 宝物数据（5类×5品质=25件） ============
 const equipments = [
   // ── 武器 ──
   { id:'w_w', name:'太一刀', type:'weapon', quality:'white',
@@ -2003,8 +1999,8 @@ const equipments = [
     time:24, count:0, locked:true, unlockLevel:42 },
 ];
 
-// ============ 强化装备数据（品质直升：白→绿→蓝→紫→橙）============
-const upgradeEquipments = [
+// ============ 强化宝物数据已移除（2026-04-22），备份见 upgrade-removed.html ============
+/* const upgradeEquipments = [
   // ── 武器强化 ──
   { id:'sw_w2g', name:'精铁刀', type:'weapon', quality:'green',
     fromName:'太一刀', fromQuality:'white', hero:{name:'关羽',avatar:'hero_700_0.png'},
@@ -2150,9 +2146,9 @@ const upgradeEquipments = [
     baseEquip:{name:'六韬秘策',icon:'equip_shield.png',quality:'purple',need:1,own:0},
     materials:[{name:'龙鳞',icon:'item_1.png',own:0,need:400},{name:'墨宝',icon:'item_1.png',own:5000,need:7000}],
     time:24, count:0, locked:true, unlockLevel:46 },
-];
+]; */
 
-// 判断是否可打造/强化
+// 判断是否可制作
 function isCraftable(eq) {
   if (eq.locked) return false;
   const matOk = eq.materials.every(m => m.own >= m.need);
@@ -2178,11 +2174,9 @@ let filterType = new Set();
 let filterHero = ''; // 武将筛选
 
 function getFilteredList() {
-  let list = currentTab === 'upgrade' ? upgradeEquipments : equipments;
-  if (currentTab === 'upgrade') list = list.filter(eq => !eq.locked);
+  let list = equipments;
   if (filterQuality.size > 0) list = list.filter(eq => filterQuality.has(eq.quality));
   if (filterType.size > 0) list = list.filter(eq => filterType.has(eq.type));
-  if (filterHero && currentTab === 'upgrade') list = list.filter(eq => eq.hero && eq.hero.name === filterHero);
   return sortEquipments(list);
 }
 
@@ -2222,27 +2216,19 @@ function goToSelect() {
   const sel = document.getElementById('screenSelect');
   sel.classList.remove('hidden-right','hidden-left');
   updateTabUI(); renderEquipList(); renderDetail();
-  demoSyncNav(currentTab === 'upgrade' ? 'select-upgrade' : 'select');
+  demoSyncNav('select');
 }
 
 function switchTab(tab) {
-  if (currentTab === tab) return;
-  currentTab = tab;
-  updateTabUI();
-  filterHero = '';
-  const list = currentTab === 'upgrade' ? upgradeEquipments : equipments;
-  selectedEquip = list[0];
-  renderEquipList(); renderDetail();
-  demoSyncNav(currentTab === 'upgrade' ? 'select-upgrade' : 'select');
+  // 强化已移除，switchTab 保留空壳避免残留调用报错
 }
 
 function updateTabUI() {
-  document.getElementById('tabForge').classList.toggle('active', currentTab === 'forge');
-  document.getElementById('tabUpgrade').classList.toggle('active', currentTab === 'upgrade');
-  document.getElementById('heroFilterBar').style.display = currentTab === 'upgrade' ? '' : 'none';
+  // 分页标签已移除，无需更新
+  document.getElementById('heroFilterBar').style.display = 'none';
   var hfb = document.getElementById('heroFilterBtn');
-  hfb.classList.toggle('active-filter', !!filterHero);
-  hfb.textContent = filterHero ? '👤 ' + filterHero : '👤 武将筛选';
+  hfb.classList.remove('active-filter');
+  hfb.textContent = '👤 武将筛选';
 }
 
 function backToMain() {
@@ -2254,29 +2240,24 @@ function backToMain() {
   else demoSyncNav('idle');
 }
 
-// ============ 装备列表渲染 ============
+// ============ 宝物列表渲染 ============
 function renderEquipList() {
   const sorted = getFilteredList();
   if (sorted.length > 0 && !sorted.find(e => e.id === selectedEquip.id)) selectedEquip = sorted[0];
-  const isUpg = currentTab === 'upgrade';
-  const badgeAlt = isUpg ? '可强化' : '可打造';
+  const badgeAlt = '可制作';
   document.getElementById('equipList').innerHTML = sorted.map(eq => {
     const craftable = isCraftable(eq);
     const typeImg = TYPE_ICONS[eq.type];
-    const displayName = isUpg && eq.fromName ? eq.fromName : eq.name;
-    const displayQuality = isUpg && eq.fromQuality ? eq.fromQuality : eq.quality;
-    const heroHtml = isUpg && eq.hero ? '<img class="hero-avatar-badge" src="'+eq.hero.avatar+'" alt="'+eq.hero.name+'">' : '';
     return `
     <div class="equip-category ${eq.id === selectedEquip.id ? 'active' : ''} ${eq.locked ? 'locked' : ''}"
          onclick="selectEquip('${eq.id}')" style="position:relative">
-      <div class="equip-icon ${displayQuality}">
-        <img src="${typeImg}" alt="${displayName}">
+      <div class="equip-icon ${eq.quality}">
+        <img src="${typeImg}" alt="${eq.name}">
         ${eq.count > 0 ? '<span class="equip-count">x'+eq.count+'</span>' : ''}
         ${craftable ? '<span class="craftable-badge"><img src="icon_hammer.png" alt="'+badgeAlt+'"></span>' : ''}
       </div>
-      <span class="equip-name">${displayName}</span>
+      <span class="equip-name">${eq.name}</span>
       ${eq.locked ? '<img class="lock-icon" src="icon_lock.png" alt="锁定">' : ''}
-      ${heroHtml}
     </div>`;
   }).join('');
 }
@@ -2333,18 +2314,17 @@ function renderRefineCompareHtml(fromLimit, toLimit) {
 
 function renderEquippedBy(hero) {
   if (!hero) return '';
-  return '<div class="equipped-by"><img src="'+hero.avatar+'" alt="'+hero.name+'"><span><span class="hero-name">'+hero.name+'</span> 装备中</span></div>';
+  return '<div class="equipped-by"><img src="'+hero.avatar+'" alt="'+hero.name+'"><span><span class="hero-name">'+hero.name+'</span> 持有中</span></div>';
 }
 
 // ============ 详情渲染 ============
 function renderDetail() {
   const el = document.getElementById('equipDetail');
   const eq = selectedEquip;
-  const isUpgradeMode = currentTab === 'upgrade';
   const typeImg = TYPE_ICONS[eq.type];
   const isBusy = isForging && !isForgeComplete;
 
-  // 材料（强化模式不显示 baseEquip）
+  // 材料列表
   const matsHtml = eq.materials.map(m => {
     const insuf = m.own < m.need;
     const info = MATERIALS_INFO[m.name] || {quality:'white'};
@@ -2352,40 +2332,21 @@ function renderDetail() {
   }).join('');
 
   const btnDisabled = eq.locked || isBusy;
-  const btnText = isBusy ? (forgeMode === 'upgrade' ? '装备强化中' : '装备打造中') : (isUpgradeMode ? '强化装备' : '打造装备');
-  const timeLabel = isUpgradeMode ? '强化时间' : '打造时间';
+  const btnText = isBusy ? '宝物制作中' : '制作宝物';
+  const timeLabel = '制作时间';
 
   if (eq.locked) {
     // 锁定
     el.innerHTML =
       '<div class="detail-icon equip-icon '+eq.quality+'"><img src="'+typeImg+'" alt="'+eq.name+'"></div>' +
       '<div class="detail-name">'+eq.name+'</div>' +
-      (isUpgradeMode && eq.fromName ? renderAttrCompareHtml(eq.fromAttrs, eq.attrs) : renderAttrsHtml(eq.attrs)) +
-      (isUpgradeMode ? renderEtchInfoLine(eq.etchings, eq.quality) : renderEtchLimitLine(eq.quality)) +
-      (isUpgradeMode && eq.fromRefineLimit ? renderRefineCompareHtml(eq.fromRefineLimit, eq.refineLimit) : renderRefineHtml(eq.refineLimit)) +
+      renderAttrsHtml(eq.attrs) +
+      renderEtchLimitLine(eq.quality) +
+      renderRefineHtml(eq.refineLimit) +
       '<div class="materials-row">'+matsHtml+'</div>' +
-      '<div class="unlock-text">铁匠铺'+eq.unlockLevel+'级解锁</div>';
-  } else if (isUpgradeMode && eq.fromName) {
-    // 强化模式：显示从→到图标对比
-    const fromTypeImg = TYPE_ICONS[eq.type];
-    const iconCompare =
-      '<div class="strengthen-icon-compare">' +
-        '<div class="equip-icon '+eq.fromQuality+'"><img src="'+fromTypeImg+'" alt="'+eq.fromName+'"></div>' +
-        '<span class="icon-arrow">→</span>' +
-        '<div class="equip-icon '+eq.quality+'"><img src="'+typeImg+'" alt="'+eq.name+'"></div>' +
-      '</div>';
-    const nameCompare = '<div class="strengthen-name"><span class="from-name">'+eq.fromName+'</span><span class="arrow">→</span><span class="to-name">'+eq.name+'</span></div>';
-    el.innerHTML =
-      iconCompare + nameCompare +
-      renderEquippedBy(eq.hero) +
-      renderAttrCompareHtml(eq.fromAttrs, eq.attrs) +
-      renderEtchInfoLine(eq.fromEtchings, eq.fromQuality) +
-      renderRefineCompareHtml(eq.fromRefineLimit, eq.refineLimit) +
-      '<div class="materials-row">'+matsHtml+'</div>' +
-      '<div class="detail-time">'+timeLabel+'：'+fmtTime(eq.time)+'</div>' +
-      '<button class="forge-btn" '+(btnDisabled?'disabled':'')+' onclick="startForge()">'+btnText+'</button>';
+      '<div class="unlock-text">珍宝阁'+eq.unlockLevel+'级解锁</div>';
   } else {
-    // 打造模式：刻蚀只显示上限
+    // 制作模式
     el.innerHTML =
       '<div class="detail-icon equip-icon '+eq.quality+'"><img src="'+typeImg+'" alt="'+eq.name+'"></div>' +
       '<div class="detail-name">'+eq.name+'</div>' +
@@ -2399,8 +2360,7 @@ function renderDetail() {
 }
 
 function selectEquip(id) {
-  const list = currentTab === 'upgrade' ? upgradeEquipments : equipments;
-  const eq = list.find(e => e.id === id);
+  const eq = equipments.find(e => e.id === id);
   if (eq) { selectedEquip = eq; renderEquipList(); renderDetail(); }
 }
 
@@ -2459,7 +2419,7 @@ function clearEffects() {
   const y = document.getElementById('completeRays'); if(y) y.innerHTML='';
 }
 
-// ============ 打造/强化流程 ============
+// ============ 制作/强化流程 ============
 let forgeMode = 'forge';
 
 function startForge() {
@@ -2467,9 +2427,9 @@ function startForge() {
   isForging = true; isForgeComplete = false;
   forgingEquip = selectedEquip;
   forgeTimeLeft = forgingEquip.time;
-  forgeMode = currentTab === 'upgrade' ? 'upgrade' : 'forge';
-  backToMain(); demoSyncNav('forging');
-  setTimeout(showForgingUI, 100);
+  forgeMode = 'forge';
+  showForgingUI();
+  backToMain();
 }
 
 function showForgingUI() {
@@ -2480,18 +2440,11 @@ function showForgingUI() {
     '<div class="equip-icon '+eq.quality+'" style="width:80px;height:80px"><img src="'+TYPE_ICONS[eq.type]+'" alt="'+eq.name+'"></div>';
   document.getElementById('forgeItemName').textContent = eq.name;
 
-  // 构建详细信息面板
+  // 构建详细信息面板（与宝物选择界面一致）
   let detailHtml = '';
-  if (forgeMode === 'upgrade' && eq.fromName) {
-    detailHtml += renderEquippedBy(eq.hero);
-    detailHtml += renderAttrCompareHtml(eq.fromAttrs, eq.attrs);
-    detailHtml += renderEtchInfoLine(eq.fromEtchings, eq.fromQuality);
-    detailHtml += renderRefineCompareHtml(eq.fromRefineLimit, eq.refineLimit);
-  } else {
-    detailHtml += renderAttrsHtml(eq.attrs);
-    detailHtml += renderEtchInfoLine(eq.etchings, eq.quality);
-    detailHtml += renderRefineHtml(eq.refineLimit);
-  }
+  detailHtml += renderAttrsHtml(eq.attrs);
+  detailHtml += renderEtchLimitLine(eq.quality);
+  detailHtml += renderRefineHtml(eq.refineLimit);
   document.getElementById('forgeEquipDetail').innerHTML = detailHtml;
 
   if (isForgeComplete) showCompleteUI(); else { showProgressUI(); beginTimer(); }
@@ -2504,9 +2457,7 @@ function showProgressUI() {
   document.getElementById('forgingProgress').style.display = 'flex';
   document.getElementById('forgingBtns').style.display = 'flex';
   const btnsEl = document.getElementById('forgingBtns');
-  const listBtnText = forgeMode === 'upgrade' ? '强化列表' : '打造列表';
-  const speedBtnText = forgeMode === 'upgrade' ? '加速强化' : '加速打造';
-  btnsEl.innerHTML = '<button class="action-btn gold-btn" onclick="goToSelect()">'+listBtnText+'</button><button class="action-btn purple-btn" onclick="speedForge()">'+speedBtnText+'</button>';
+  btnsEl.innerHTML = '<button class="action-btn gold-btn" onclick="goToSelect()">制作列表</button><button class="action-btn purple-btn" onclick="speedForge()">加速制作</button>';
   document.getElementById('forgeSuccessPanel').style.display = 'none';
   document.getElementById('completeLabel').style.display = 'none';
   document.getElementById('collectArea').style.display = 'none';
@@ -2524,13 +2475,13 @@ function showCompleteUI() {
   document.getElementById('forgingBtns').style.display = 'none';
 
   if (forgeMode === 'upgrade') {
-    // 强化：简单样式
-    document.getElementById('completeLabel').textContent = '强化完成';
+    // 强化：简单样式（强化已移除，此分支保留防报错）
+    document.getElementById('completeLabel').textContent = '完成';
     document.getElementById('completeLabel').style.display = 'block';
     document.getElementById('collectArea').style.display = 'block';
   } else {
-    // 打造：简单样式
-    document.getElementById('completeLabel').textContent = '打造完成';
+    // 制作
+    document.getElementById('completeLabel').textContent = '制作完成';
     document.getElementById('completeLabel').style.display = 'block';
     document.getElementById('collectArea').style.display = 'block';
   }
@@ -2591,7 +2542,7 @@ function closeHelp() {
     if (isForging && !isForgeComplete) demoSyncNav('forging');
     else if (isForging && isForgeComplete) demoSyncNav('complete');
     else demoSyncNav('idle');
-  } else { demoSyncNav(currentTab === 'upgrade' ? 'select-upgrade' : 'select'); }
+  } else { demoSyncNav('select'); }
 }
 
 // ============ 道具详情（已简化为通用弹窗提示） ============
@@ -2656,7 +2607,7 @@ function resetHeroFilter() {
   if (list.length > 0) { selectedEquip = list[0]; renderDetail(); }
 }
 
-// ============ 装备分解 ============
+// ============ 宝物分解 ============
 let decomposeSelected = new Set();
 let decomposeQualityFilter = '';
 const DECOMPOSE_ITEMS = [
@@ -2694,7 +2645,11 @@ function closeDecompose() {
 }
 function renderDecomposeGrid() {
   const grid = document.getElementById('decomposeGrid');
-  let items = DECOMPOSE_ITEMS;
+  let items = DECOMPOSE_ITEMS.slice().sort((a, b) => {
+    const qi = QUALITY_ORDER.indexOf(a.quality) - QUALITY_ORDER.indexOf(b.quality);
+    if (qi !== 0) return qi;
+    return TYPE_ORDER.indexOf(a.type) - TYPE_ORDER.indexOf(b.type);
+  });
   grid.innerHTML = items.map(item => {
     const sel = decomposeSelected.has(item.id);
     return '<div class="decompose-item'+(sel?' selected':'')+'" onclick="toggleDecomposeItem(\''+item.id+'\')">' +
@@ -2742,7 +2697,7 @@ function renderDecomposeResult() {
   const el = document.getElementById('decomposeResult');
   const count = decomposeSelected.size;
   if (count === 0) {
-    el.innerHTML = '<div class="decompose-empty">选择要分解的装备</div>';
+    el.innerHTML = '<div class="decompose-empty">选择要分解的宝物</div>';
     return;
   }
   let ironReturn = 0, specialReturn = 0;
@@ -2764,8 +2719,8 @@ function renderDecomposeResult() {
     '</div>';
 }
 function confirmDecompose() {
-  if (decomposeSelected.size === 0) { showToast('请先选择要分解的装备'); return; }
-  showToast('已分解 ' + decomposeSelected.size + ' 件装备');
+  if (decomposeSelected.size === 0) { showToast('请先选择要分解的宝物'); return; }
+  showToast('已分解 ' + decomposeSelected.size + ' 件宝物');
   decomposeSelected.clear();
   renderDecomposeGrid();
   renderDecomposeResult();
@@ -2773,22 +2728,22 @@ function confirmDecompose() {
 
 // ============ Demo 演示导航 ============
 var DEMO_OLD_UI = {
-  idle: { img: 'oldUI1.jpg', note: '默认界面改为一个背景图 + 一个打造按钮的打造主界面，点击「+」才打开装备选择的界面。<br>暂时取消在这个系统中直接卖图纸的操作。' },
-  forging: { img: 'oldUI2.jpg', note: '打造/强化中不再显示列表，可以点击「打造列表」或「强化列表」按钮查看。' },
-  complete: { img: 'oldUI3.jpg', note: '打造/强化完成时，也不显示列表，必须收取后才能重新点击「+」查看列表。' },
-  select: { img: 'oldUI1.jpg', note: '1. 玩家不需要根据有没有图纸来查看装备列表，直接显示所有可以打造的装备；<br>2. 随着铁匠铺等级的提升，玩家可以看到更多可解锁的装备；主公等级提升解锁装备的打造权限；<br>3. 图纸也作为1个消耗的道具，和常规道具一样显示；<br>4. 暂时不改动现有的装备系统逻辑，原来有几条属性就显示几条属性。<br>5. 底部新增<b>「打造」「强化」</b>分页标签，左侧返回、右侧材料合成不变。' },
-  'select-upgrade': { img: 'oldUI1.jpg', note: '【新增】装备强化分页：<br>1. 强化需要<b>低级装备 + 图纸 + 材料</b>；<br>2. 打造和强化流程一致，同时只能进行一个；<br>3. 底部「强化」标签高亮，列表显示可强化的装备。' },
+  idle: { img: 'oldUI1.jpg', note: '默认界面改为一个背景图 + 一个制作按钮的制作主界面，点击「+」才打开宝物选择的界面。<br>暂时取消在这个系统中直接卖图纸的操作。' },
+  forging: { img: 'oldUI2.jpg', note: '制作中不再显示列表，可以点击「制作列表」按钮查看。' },
+  complete: { img: 'oldUI3.jpg', note: '制作完成时，也不显示列表，必须收取后才能重新点击「+」查看列表。' },
+  select: { img: 'oldUI1.jpg', note: '1. 玩家不需要根据有没有图纸来查看宝物列表，直接显示所有可以制作的宝物；<br>2. 随着珍宝阁等级的提升，玩家可以看到更多可解锁的宝物；主公等级提升解锁宝物的制作权限；<br>3. 图纸也作为1个消耗的道具，和常规道具一样显示；<br>4. 暂时不改动现有的宝物系统逻辑，原来有几条属性就显示几条属性。' },
+  /* 'select-upgrade': 已移除（2026-04-22） */
   help: { img: 'oldUI4.jpg', note: '帮助弹窗改为常规的文字说明。' },
-  decompose: { img: '', note: '【新增】装备分解界面，可将闲置装备分解为材料回收。' }
+  decompose: { img: '', note: '【新增】宝物分解界面，可将闲置宝物分解为材料回收。' }
 };
 var DEMO_DESCS = {
-  idle: '<ul><li>界面展示铁匠铺场景，中央显示<b>「+」</b>按钮</li><li>点击「+」→ 滑入<b>装备选择界面</b></li><li>顶栏标题<b>「装备打造」</b>，右上角<b>「?」</b>按钮打开帮助弹窗</li><li>底栏<b>返回</b>按钮 → 返回主城</li></ul>',
-  forging: '<ul><li>中央打造圆环内显示装备图标</li><li>CSS动画特效：锤子交替敲打 + 多层火花粒子 + 撞击闪光 + 热力光环 + 烟雾上升</li><li>下方<b>进度条</b>实时倒计时</li><li>打造中显示<b>「打造列表」</b>，强化中显示<b>「强化列表」</b>→ 回到装备选择（不中断进度）</li><li><b>「加速打造/强化」</b>→ 调用<b>通用加速弹窗</b>（外部通用组件），加速后立即完成</li></ul>',
-  complete: '<ul><li>圆环停止旋转，触发<b>完成光效</b>（爆发光 + 12道放射光芒）</li><li>显示「打造完成」或「强化完成」提示文字</li><li><b>「收 取」</b>按钮 → 装备入包，界面回到空闲状态</li><li>对应装备数量 +1，可在选择列表中查看</li></ul>',
-  select: '<ul><li>左右分栏布局，左侧装备列表 + 右侧装备详情</li><li>列表排序规则：<b>可打造 → 已解锁 → 未解锁</b>，同状态按品质、类型排序</li><li><span style="color:#4a4">绿色锤子图标</span> 表示材料充足可直接打造</li><li>锁定装备显示半透明 + 锁图标 + 解锁等级</li><li>右侧显示品质边框、名称、多条属性、<b>刻蚀上限</b>、洗炼上限、材料需求、打造按钮</li><li>点击材料图标 → 调用<b>通用道具弹窗</b>（外部通用组件）</li><li>底部栏中间为<b>「打造」「强化」</b>分页标签，左侧返回、右侧装备分解</li><li>打造或强化中时按钮置灰，显示「装备打造中」或「装备强化中」</li></ul>',
-  'select-upgrade': '<ul><li>与打造分页布局完全一致，切换到<b>「强化」</b>标签</li><li>列表显示<b>当前装备</b>（非目标装备），有武将佩戴时左上角显示<b>武将头像</b></li><li>右侧详情显示<b>品质图标对比</b>（当前→强化后）及名称对比</li><li>佩戴武将信息显示在名称下方</li><li>材料列表<b>不再包含</b>基础装备</li><li>属性前后对比（旧→新），刻蚀继承，洗炼上限对比</li><li>强化流程与打造完全一致</li><li>顶部新增<b>「武将筛选」</b>按钮，可按武将过滤装备</li></ul>',
+  idle: '<ul><li>界面展示珍宝阁场景，中央显示<b>「+」</b>按钮</li><li>点击「+」→ 滑入<b>宝物选择界面</b></li><li>顶栏标题<b>「宝物制作」</b>，右上角<b>「?」</b>按钮打开帮助弹窗</li><li>底栏左侧<b>返回</b>按钮 → 返回主城，右侧<b>「宝物分解」</b>按钮 → 开启分解界面</li></ul>',
+  forging: '<ul><li>中央制作圆环内显示宝物图标</li><li>CSS动画特效：锤子交替敲打 + 多层火花粒子 + 撞击闪光 + 热力光环 + 烟雾上升</li><li>下方<b>进度条</b>实时倒计时</li><li>显示<b>「制作列表」</b>→ 回到宝物选择（不中断进度）</li><li><b>「加速制作」</b>→ 调用<b>通用加速弹窗</b>（外部通用组件），加速后立即完成</li></ul>',
+  complete: '<ul><li>圆环停止旋转，触发<b>完成光效</b>（爆发光 + 12道放射光芒）</li><li>显示「制作完成」提示文字</li><li><b>「收 取」</b>按钮 → 宝物入包，界面回到空闲状态</li><li>对应宝物数量 +1，可在选择列表中查看</li></ul>',
+  select: '<ul><li>左右分栏布局，左侧宝物列表 + 右侧宝物详情</li><li>列表排序规则：<b>可制作 → 已解锁 → 未解锁</b>，同状态按品质、类型排序</li><li><span style="color:#4a4">绿色锤子图标</span> 表示材料充足可直接制作</li><li>锁定宝物显示半透明 + 锁图标 + 解锁等级</li><li>右侧显示品质边框、名称、多条属性、<b>刻蚀上限</b>、洗炼上限、材料需求、制作按钮</li><li>点击材料图标 → 调用<b>通用道具弹窗</b>（外部通用组件）</li></ul>',
+  /* 'select-upgrade': 已移除（2026-04-22） */
   help: '',
-  decompose: '<ul><li>从底栏点击<b>「装备分解」</b>进入</li><li>网格显示可分解的闲置装备，可按品质筛选</li><li><b>一键选择</b>：按当前筛选品质自动选中最多15件</li><li>右侧显示<b>预计返还</b>的材料数量</li><li>确认分解后装备销毁、材料入包</li></ul>'
+  decompose: '<ul><li>从主界面底栏<b>「宝物分解」</b>进入，再制作中/完成待收取时同样可用</li><li>网格显示可分解的闲置宝物，可按品质筛选</li><li><b>一键选择</b>：按当前筛选品质自动选中最多15件</li><li>右侧显示<b>预计返还</b>的材料数量</li><li>确认分解后宝物销毁、材料入包</li></ul>'
 };
 
 function scrollDocTo(id) {
@@ -2812,7 +2767,7 @@ function demoGo(id) {
   closeHelp();
   closeDecompose();
   closeHeroFilter();
-  // 清理打造状态
+  // 清理制作状态
   if (forgeTimer) { clearInterval(forgeTimer); forgeTimer = null; }
   clearEffects();
   var ring = document.getElementById('forgeRing');
@@ -2845,7 +2800,7 @@ function demoGo(id) {
       document.getElementById('forgeItemDisplay').innerHTML =
         '<div class="equip-icon '+forgingEquip.quality+'" style="width:80px;height:80px"><img src="'+TYPE_ICONS[forgingEquip.type]+'" alt="'+forgingEquip.name+'"></div>';
       document.getElementById('forgeItemName').textContent = forgingEquip.name;
-      document.getElementById('forgeEquipDetail').innerHTML = renderAttrsHtml(forgingEquip.attrs) + renderEtchInfoLine(forgingEquip.etchings, forgingEquip.quality) + renderRefineHtml(forgingEquip.refineLimit);
+      document.getElementById('forgeEquipDetail').innerHTML = renderAttrsHtml(forgingEquip.attrs) + renderEtchLimitLine(forgingEquip.quality) + renderRefineHtml(forgingEquip.refineLimit);
       showProgressUI(); beginTimer();
       break;
     case 'complete':
@@ -2857,7 +2812,7 @@ function demoGo(id) {
       document.getElementById('forgeItemDisplay').innerHTML =
         '<div class="equip-icon '+forgingEquip.quality+'" style="width:80px;height:80px"><img src="'+TYPE_ICONS[forgingEquip.type]+'" alt="'+forgingEquip.name+'"></div>';
       document.getElementById('forgeItemName').textContent = forgingEquip.name;
-      document.getElementById('forgeEquipDetail').innerHTML = renderAttrsHtml(forgingEquip.attrs) + renderEtchInfoLine(forgingEquip.etchings, forgingEquip.quality) + renderRefineHtml(forgingEquip.refineLimit);
+      document.getElementById('forgeEquipDetail').innerHTML = renderAttrsHtml(forgingEquip.attrs) + renderEtchLimitLine(forgingEquip.quality) + renderRefineHtml(forgingEquip.refineLimit);
       showCompleteUI();
       break;
     case 'select':
@@ -2867,13 +2822,7 @@ function demoGo(id) {
       sel.classList.remove('hidden-right','hidden-left');
       renderEquipList(); renderDetail();
       break;
-    case 'select-upgrade':
-      currentTab = 'upgrade'; updateTabUI();
-      selectedEquip = upgradeEquipments[0];
-      main.classList.add('hidden-left');
-      sel.classList.remove('hidden-right','hidden-left');
-      renderEquipList(); renderDetail();
-      break;
+    /* case 'select-upgrade': 已移除（2026-04-22） */
     case 'help':
       main.classList.remove('hidden-left','hidden-right');
       sel.classList.add('hidden-right');

@@ -1,0 +1,205 @@
+<!--
+  装备强化模块备份
+  移除日期：2026-04-22
+  原因：决策调整，装备只能打造，暂时移除强化功能，保留备用。
+-->
+
+<!-- =====================================================================
+     一、文档章节：七、装备强化
+     原位置：index.html 文档面板内，六、装备打造 之后
+===================================================================== -->
+<!--
+      <div class="doc-chapter">
+        <h2 class="doc-h2" id="doc-select-upgrade">七、装备强化 <button class="doc-screen-btn" onclick="demoGo('select-upgrade')">&#9654; 查看原型</button></h2>
+        <h3 class="doc-h3">7.1 强化概念</h3>
+        <p>装备强化的本质是将玩家已持有的一件低品质装备"升级"为高一级品质的同类型装备。强化时，<b>消耗原装备 1 件</b>，并消耗图纸和材料，完成后生成下一品质的同类装备。强化方向为品质直升：白→绿→蓝→紫→橙，每次只能升一个等级，橙色为最高品质不可继续强化。</p>
+        <h3 class="doc-h3">7.2 强化条件</h3>
+        <ul class="doc-list">
+          <li>背包中持有 1 件对应的低品质装备（强化开始时消耗）。</li>
+          <li>对应的图纸 × 1（消耗）。</li>
+          <li>所需的强化材料（种类和数量固定，通常多于打造同品质装备所需）。</li>
+          <li>铁匠铺等级满足目标品质装备的解锁要求。</li>
+          <li>铁匠铺当前无正在执行的任务。</li>
+        </ul>
+        <h3 class="doc-h3">7.3 强化列表规则</h3>
+        <ul class="doc-list">
+          <li>强化列表展示<b>玩家当前持有（count≥1）且存在更高品质版本</b>的装备。</li>
+          <li>列表显示的是<b>当前持有的装备</b>（不是目标装备），方便玩家找到手里有的装备。</li>
+          <li><b>铁匠铺等级不足以解锁目标品质</b>的强化项不出现在列表（不同于打造列表会显示锁定项）。</li>
+          <li>若武将正在佩戴某件装备，该装备图标左上角显示<b>武将头像标记</b>。</li>
+          <li>顶部提供<b>「武将筛选」</b>按钮，可过滤只显示某位武将装备中的装备。</li>
+        </ul>
+        <h3 class="doc-h3">7.4 强化详情面板</h3>
+        <ul class="doc-list">
+          <li><b>品质图标对比</b>：左侧当前品质图标 → 箭头 → 右侧目标品质图标</li>
+          <li><b>装备名称对比</b>：当前名称 → 强化后名称</li>
+          <li>若武将正在佩戴该装备，显示武将头像 + 武将名称</li>
+          <li><b>属性对比</b>：每条属性显示「旧值 → 新值」，新值颜色高亮</li>
+          <li>刻蚀：显示当前装备已有的刻蚀情况；强化后刻蚀不丢失，刻蚀品质上限随品质提升</li>
+          <li>洗炼上限对比：旧上限条数 → 新上限条数</li>
+          <li>材料需求（含图纸，<b>不包含</b>被消耗的低品质装备本身）</li>
+          <li>预计强化时间</li>
+          <li><b>「强化装备」</b>按钮</li>
+        </ul>
+        <h3 class="doc-h3">7.5 强化后的装备归属</h3>
+        <p>若被强化的装备正在被武将佩戴，强化完成并收取后，武将<b>自动换装</b>为强化后的新装备（佩戴关系保持，装备更新为高品质版本）。</p>
+        <h3 class="doc-h3">7.6 强化与打造的共同规则</h3>
+        <p>强化的整体流程与打造相同：确认→扣除材料→进行中→完成→收取。两者共用同一个铁匠铺任务槽，同时只能进行一种操作。</p>
+      </div>
+-->
+
+<!-- =====================================================================
+     二、JS 数据：upgradeEquipments 数组
+     原位置：index.html <script> 内，equipments 数组之后
+===================================================================== -->
+<script>
+/*
+const upgradeEquipments = [
+  // ── 武器强化 ──
+  { id:'sw_w2g', name:'精铁刀', type:'weapon', quality:'green',
+    fromName:'太一刀', fromQuality:'white', hero:{name:'关羽',avatar:'hero_700_0.png'},
+    fromAttrs:[{l:'攻击',v:'+50'}], attrs:[{l:'攻击',v:'+120'},{l:'防御',v:'+40'}],
+    fromEtchings:[], fromRefineLimit:1, refineLimit:2,
+    baseEquip:{name:'太一刀',icon:'equip_sword.png',quality:'white',need:1,own:3},
+    materials:[{name:'精铁',icon:'item_2.png',own:111000,need:3000},{name:'图纸',icon:'item_1.png',own:1,need:1}],
+    time:8, count:0, locked:false },
+  { id:'sw_g2b', name:'青龙偃月刀', type:'weapon', quality:'blue',
+    fromName:'精铁刀', fromQuality:'green', hero:{name:'张飞',avatar:'hero_10031006_0.png'},
+    fromAttrs:[{l:'攻击',v:'+120'},{l:'防御',v:'+40'}], attrs:[{l:'攻击',v:'+250'},{l:'防御',v:'+80'},{l:'武力',v:'+5'}],
+    fromEtchings:[{n:'锐利',i:'⚔️'}], fromRefineLimit:2, refineLimit:3,
+    baseEquip:{name:'精铁刀',icon:'equip_sword.png',quality:'green',need:1,own:6},
+    materials:[{name:'玄铁',icon:'item_2.png',own:5000,need:4000},{name:'图纸',icon:'item_1.png',own:1,need:1}],
+    time:12, count:0, locked:false },
+  { id:'sw_b2p', name:'方天画戟', type:'weapon', quality:'purple',
+    fromName:'青龙偃月刀', fromQuality:'blue',
+    fromAttrs:[{l:'攻击',v:'+250'},{l:'防御',v:'+80'},{l:'武力',v:'+5'}], attrs:[{l:'攻击',v:'+450'},{l:'防御',v:'+150'},{l:'武力',v:'+12'},{l:'减伤',v:'+3%'}],
+    fromEtchings:[{n:'锐利',i:'⚔️'},{n:'烈焰',i:'🔥'}], fromRefineLimit:3, refineLimit:4,
+    baseEquip:{name:'青龙偃月刀',icon:'equip_sword.png',quality:'blue',need:1,own:0},
+    materials:[{name:'陨铁',icon:'item_2.png',own:800,need:1500},{name:'图纸',icon:'item_1.png',own:1,need:1}],
+    time:16, count:0, locked:false },
+  { id:'sw_p2o', name:'赤霄剑', type:'weapon', quality:'orange',
+    fromName:'方天画戟', fromQuality:'purple',
+    fromAttrs:[{l:'攻击',v:'+450'},{l:'防御',v:'+150'},{l:'武力',v:'+12'},{l:'减伤',v:'+3%'}], attrs:[{l:'攻击',v:'+800'},{l:'防御',v:'+280'},{l:'武力',v:'+25'},{l:'减伤',v:'+6%'},{l:'增伤',v:'+5%'}],
+    fromEtchings:[{n:'锐利',i:'⚔️'},{n:'坚韧',i:'🛡️'}], fromRefineLimit:4, refineLimit:5,
+    baseEquip:{name:'方天画戟',icon:'equip_sword.png',quality:'purple',need:1,own:0},
+    materials:[{name:'龙鳞',icon:'item_1.png',own:0,need:800},{name:'图纸',icon:'item_1.png',own:0,need:1}],
+    time:24, count:0, locked:true, unlockLevel:45 },
+  // ── 坐骑强化 ──
+  { id:'sm_w2g', name:'白鸽马', type:'mount', quality:'green',
+    fromName:'驽马', fromQuality:'white', hero:{name:'赵云',avatar:'hero_10024201_0.png'},
+    fromAttrs:[{l:'防御',v:'+50'}], attrs:[{l:'防御',v:'+120'},{l:'带兵',v:'+200'}],
+    fromEtchings:[], fromRefineLimit:1, refineLimit:2,
+    baseEquip:{name:'驽马',icon:'equip_horse.png',quality:'white',need:1,own:2},
+    materials:[{name:'精铁',icon:'item_2.png',own:111000,need:3000},{name:'马料',icon:'item_1.png',own:30000,need:4000}],
+    time:8, count:0, locked:false },
+  { id:'sm_g2b', name:'的卢马', type:'mount', quality:'blue',
+    fromName:'白鸽马', fromQuality:'green', hero:{name:'刘备',avatar:'hero_700_0.png'},
+    fromAttrs:[{l:'防御',v:'+120'},{l:'带兵',v:'+200'}], attrs:[{l:'防御',v:'+250'},{l:'带兵',v:'+500'},{l:'统率',v:'+5'}],
+    fromEtchings:[{n:'疾风',i:'💨'}], fromRefineLimit:2, refineLimit:3,
+    baseEquip:{name:'白鸽马',icon:'equip_horse.png',quality:'green',need:1,own:6},
+    materials:[{name:'玄铁',icon:'item_2.png',own:5000,need:3000},{name:'马料',icon:'item_1.png',own:30000,need:8000}],
+    time:12, count:0, locked:false },
+  { id:'sm_b2p', name:'绝影马', type:'mount', quality:'purple',
+    fromName:'的卢马', fromQuality:'blue',
+    fromAttrs:[{l:'防御',v:'+250'},{l:'带兵',v:'+500'},{l:'统率',v:'+5'}], attrs:[{l:'防御',v:'+450'},{l:'带兵',v:'+1000'},{l:'统率',v:'+12'},{l:'减伤',v:'+3%'}],
+    fromEtchings:[{n:'疾风',i:'💨'},{n:'坚韧',i:'🛡️'}], fromRefineLimit:3, refineLimit:4,
+    baseEquip:{name:'的卢马',icon:'equip_horse.png',quality:'blue',need:1,own:0},
+    materials:[{name:'陨铁',icon:'item_2.png',own:800,need:1200},{name:'马料',icon:'item_1.png',own:30000,need:15000}],
+    time:16, count:0, locked:false },
+  { id:'sm_p2o', name:'赤兔马', type:'mount', quality:'orange',
+    fromName:'绝影马', fromQuality:'purple',
+    fromAttrs:[{l:'防御',v:'+450'},{l:'带兵',v:'+1000'},{l:'统率',v:'+12'},{l:'减伤',v:'+3%'}], attrs:[{l:'防御',v:'+800'},{l:'带兵',v:'+2000'},{l:'统率',v:'+25'},{l:'减伤',v:'+6%'},{l:'增伤',v:'+5%'}],
+    fromEtchings:[{n:'疾风',i:'💨'},{n:'寒冰',i:'❄️'}], fromRefineLimit:4, refineLimit:5,
+    baseEquip:{name:'绝影马',icon:'equip_horse.png',quality:'purple',need:1,own:0},
+    materials:[{name:'龙鳞',icon:'item_1.png',own:0,need:600},{name:'马料',icon:'item_1.png',own:30000,need:25000}],
+    time:24, count:0, locked:true, unlockLevel:45 },
+  // ── 令符强化 ──
+  { id:'st_w2g', name:'铜令符', type:'token', quality:'green',
+    fromName:'铁令符', fromQuality:'white', hero:{name:'诸葛亮',avatar:'hero_10031006_0.png'},
+    fromAttrs:[{l:'带兵',v:'+200'}], attrs:[{l:'带兵',v:'+500'},{l:'攻击',v:'+40'}],
+    fromEtchings:[], fromRefineLimit:1, refineLimit:2,
+    baseEquip:{name:'铁令符',icon:'equip_spear.png',quality:'white',need:1,own:1},
+    materials:[{name:'精铁',icon:'item_2.png',own:111000,need:2500},{name:'玉石',icon:'item_2.png',own:8000,need:1000}],
+    time:8, count:0, locked:false },
+  { id:'st_g2b', name:'银令符', type:'token', quality:'blue',
+    fromName:'铜令符', fromQuality:'green',
+    fromAttrs:[{l:'带兵',v:'+500'},{l:'攻击',v:'+40'}], attrs:[{l:'带兵',v:'+1000'},{l:'攻击',v:'+80'},{l:'智力',v:'+5'}],
+    fromEtchings:[{n:'雷击',i:'⚡'}], fromRefineLimit:2, refineLimit:3,
+    baseEquip:{name:'铜令符',icon:'equip_spear.png',quality:'green',need:1,own:0},
+    materials:[{name:'玄铁',icon:'item_2.png',own:5000,need:3000},{name:'玉石',icon:'item_2.png',own:8000,need:2500}],
+    time:12, count:0, locked:false },
+  { id:'st_b2p', name:'金令符', type:'token', quality:'purple',
+    fromName:'银令符', fromQuality:'blue',
+    fromAttrs:[{l:'带兵',v:'+1000'},{l:'攻击',v:'+80'},{l:'智力',v:'+5'}], attrs:[{l:'带兵',v:'+2000'},{l:'攻击',v:'+150'},{l:'智力',v:'+12'},{l:'增伤',v:'+3%'}],
+    fromEtchings:[{n:'雷击',i:'⚡'},{n:'烈焰',i:'🔥'}], fromRefineLimit:3, refineLimit:4,
+    baseEquip:{name:'银令符',icon:'equip_spear.png',quality:'blue',need:1,own:0},
+    materials:[{name:'陨铁',icon:'item_2.png',own:800,need:1000},{name:'玉石',icon:'item_2.png',own:8000,need:4000}],
+    time:16, count:0, locked:false },
+  { id:'st_p2o', name:'玉令符', type:'token', quality:'orange',
+    fromName:'金令符', fromQuality:'purple',
+    fromAttrs:[{l:'带兵',v:'+2000'},{l:'攻击',v:'+150'},{l:'智力',v:'+12'},{l:'增伤',v:'+3%'}], attrs:[{l:'带兵',v:'+4000'},{l:'攻击',v:'+280'},{l:'智力',v:'+25'},{l:'增伤',v:'+6%'},{l:'减伤',v:'+5%'}],
+    fromEtchings:[{n:'雷击',i:'⚡'},{n:'烈焰',i:'🔥'}], fromRefineLimit:4, refineLimit:5,
+    baseEquip:{name:'金令符',icon:'equip_spear.png',quality:'purple',need:1,own:0},
+    materials:[{name:'龙鳞',icon:'item_1.png',own:0,need:500},{name:'玉石',icon:'item_2.png',own:8000,need:7000}],
+    time:24, count:0, locked:true, unlockLevel:45 },
+  // ── 奇珍强化 ──
+  { id:'str_w2g', name:'玉佩', type:'treasure', quality:'green',
+    fromName:'铜镜', fromQuality:'white',
+    fromAttrs:[{l:'攻击',v:'+30'},{l:'防御',v:'+30'}], attrs:[{l:'攻击',v:'+70'},{l:'防御',v:'+70'},{l:'带兵',v:'+150'}],
+    fromEtchings:[], fromRefineLimit:1, refineLimit:2,
+    baseEquip:{name:'铜镜',icon:'equip_bow.png',quality:'white',need:1,own:0},
+    materials:[{name:'精铁',icon:'item_2.png',own:111000,need:2000},{name:'丝绸',icon:'item_1.png',own:12000,need:1500}],
+    time:8, count:0, locked:false },
+  { id:'str_g2b', name:'夜明珠', type:'treasure', quality:'blue',
+    fromName:'玉佩', fromQuality:'green',
+    fromAttrs:[{l:'攻击',v:'+70'},{l:'防御',v:'+70'},{l:'带兵',v:'+150'}], attrs:[{l:'攻击',v:'+150'},{l:'防御',v:'+150'},{l:'带兵',v:'+350'},{l:'政治',v:'+5'}],
+    fromEtchings:[{n:'寒冰',i:'❄️'}], fromRefineLimit:2, refineLimit:3,
+    baseEquip:{name:'玉佩',icon:'equip_bow.png',quality:'green',need:1,own:0},
+    materials:[{name:'玄铁',icon:'item_2.png',own:5000,need:2500},{name:'丝绸',icon:'item_1.png',own:12000,need:3000}],
+    time:12, count:0, locked:false },
+  { id:'str_b2p', name:'和氏璧', type:'treasure', quality:'purple',
+    fromName:'夜明珠', fromQuality:'blue',
+    fromAttrs:[{l:'攻击',v:'+150'},{l:'防御',v:'+150'},{l:'带兵',v:'+350'},{l:'政治',v:'+5'}], attrs:[{l:'攻击',v:'+280'},{l:'防御',v:'+280'},{l:'带兵',v:'+700'},{l:'政治',v:'+12'},{l:'增伤',v:'+3%'}],
+    fromEtchings:[{n:'寒冰',i:'❄️'},{n:'烈焰',i:'🔥'}], fromRefineLimit:3, refineLimit:4,
+    baseEquip:{name:'夜明珠',icon:'equip_bow.png',quality:'blue',need:1,own:0},
+    materials:[{name:'陨铁',icon:'item_2.png',own:800,need:600},{name:'丝绸',icon:'item_1.png',own:12000,need:5000}],
+    time:16, count:0, locked:false },
+  { id:'str_p2o', name:'传国玺', type:'treasure', quality:'orange',
+    fromName:'和氏璧', fromQuality:'purple',
+    fromAttrs:[{l:'攻击',v:'+280'},{l:'防御',v:'+280'},{l:'带兵',v:'+700'},{l:'政治',v:'+12'},{l:'增伤',v:'+3%'}], attrs:[{l:'攻击',v:'+500'},{l:'防御',v:'+500'},{l:'带兵',v:'+1500'},{l:'政治',v:'+25'},{l:'增伤',v:'+6%'},{l:'减伤',v:'+5%'}],
+    fromEtchings:[{n:'寒冰',i:'❄️'},{n:'坚韧',i:'🛡️'}], fromRefineLimit:4, refineLimit:5,
+    baseEquip:{name:'和氏璧',icon:'equip_bow.png',quality:'purple',need:1,own:0},
+    materials:[{name:'龙鳞',icon:'item_1.png',own:0,need:200},{name:'丝绸',icon:'item_1.png',own:12000,need:8000}],
+    time:24, count:0, locked:true, unlockLevel:48 },
+  // ── 宝典强化 ──
+  { id:'sb_w2g', name:'孙子兵法', type:'book', quality:'green',
+    fromName:'兵法残卷', fromQuality:'white',
+    fromAttrs:[{l:'攻击',v:'+40'},{l:'带兵',v:'+100'}], attrs:[{l:'攻击',v:'+90'},{l:'带兵',v:'+250'},{l:'防御',v:'+50'}],
+    fromEtchings:[], fromRefineLimit:1, refineLimit:2,
+    baseEquip:{name:'兵法残卷',icon:'equip_shield.png',quality:'white',need:1,own:0},
+    materials:[{name:'精铁',icon:'item_2.png',own:111000,need:2000},{name:'墨宝',icon:'item_1.png',own:5000,need:1000}],
+    time:8, count:0, locked:false },
+  { id:'sb_g2b', name:'太公兵法', type:'book', quality:'blue',
+    fromName:'孙子兵法', fromQuality:'green',
+    fromAttrs:[{l:'攻击',v:'+90'},{l:'带兵',v:'+250'},{l:'防御',v:'+50'}], attrs:[{l:'攻击',v:'+180'},{l:'带兵',v:'+600'},{l:'防御',v:'+100'},{l:'魅力',v:'+5'}],
+    fromEtchings:[{n:'烈焰',i:'🔥'}], fromRefineLimit:2, refineLimit:3,
+    baseEquip:{name:'孙子兵法',icon:'equip_shield.png',quality:'green',need:1,own:0},
+    materials:[{name:'玄铁',icon:'item_2.png',own:5000,need:2000},{name:'墨宝',icon:'item_1.png',own:5000,need:2500}],
+    time:12, count:0, locked:false },
+  { id:'sb_b2p', name:'六韬秘策', type:'book', quality:'purple',
+    fromName:'太公兵法', fromQuality:'blue',
+    fromAttrs:[{l:'攻击',v:'+180'},{l:'带兵',v:'+600'},{l:'防御',v:'+100'},{l:'魅力',v:'+5'}], attrs:[{l:'攻击',v:'+320'},{l:'带兵',v:'+1200'},{l:'防御',v:'+200'},{l:'魅力',v:'+12'},{l:'减伤',v:'+3%'}],
+    fromEtchings:[{n:'烈焰',i:'🔥'},{n:'雷击',i:'⚡'}], fromRefineLimit:3, refineLimit:4,
+    baseEquip:{name:'太公兵法',icon:'equip_shield.png',quality:'blue',need:1,own:0},
+    materials:[{name:'陨铁',icon:'item_2.png',own:800,need:600},{name:'墨宝',icon:'item_1.png',own:5000,need:4000}],
+    time:16, count:0, locked:false },
+  { id:'sb_p2o', name:'天书宝典', type:'book', quality:'orange',
+    fromName:'六韬秘策', fromQuality:'purple',
+    fromAttrs:[{l:'攻击',v:'+320'},{l:'带兵',v:'+1200'},{l:'防御',v:'+200'},{l:'魅力',v:'+12'},{l:'减伤',v:'+3%'}], attrs:[{l:'攻击',v:'+560'},{l:'带兵',v:'+2500'},{l:'防御',v:'+380'},{l:'魅力',v:'+25'},{l:'减伤',v:'+6%'},{l:'增伤',v:'+5%'}],
+    fromEtchings:[{n:'烈焰',i:'🔥'},{n:'雷击',i:'⚡'}], fromRefineLimit:4, refineLimit:5,
+    baseEquip:{name:'六韬秘策',icon:'equip_shield.png',quality:'purple',need:1,own:0},
+    materials:[{name:'龙鳞',icon:'item_1.png',own:0,need:400},{name:'墨宝',icon:'item_1.png',own:5000,need:7000}],
+    time:24, count:0, locked:true, unlockLevel:46 },
+];
+*/
+</script>
