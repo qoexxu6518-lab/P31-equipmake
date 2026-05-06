@@ -1216,7 +1216,7 @@ body {
 }
 .attr-compare-row.attr-added .attr-label { color: #cc6600; }
 
-/* ============ 刻蚀信息行 ============ */
+/* ============ 注魂信息行 ============ */
 .etch-info-line {
   width: 100%; padding: 3px 8px; font-size: 14px; color: #4a3a20;
   display: flex; justify-content: space-between; align-items: center;
@@ -1365,7 +1365,7 @@ body {
 .decompose-item.selected .equip-icon { box-shadow: 0 0 0 2px #44cc44; border-radius: 4px; }
 .decompose-item.has-etching { opacity: 0.3; pointer-events: none; }
 .decompose-item.has-etching::after {
-  content: '已刻蚀'; position: absolute; top: 50%; left: 50%;
+  content: '已注魂'; position: absolute; top: 50%; left: 50%;
   transform: translate(-50%,-50%);
   font-size: 10px; color: #cc6644; background: rgba(0,0,0,0.7);
   padding: 2px 4px; border-radius: 2px; z-index: 5;
@@ -1494,36 +1494,26 @@ body {
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2">三、珍宝阁建筑与升级</h2>
-        <h3 class="doc-h3">3.1 珍宝阁升级</h3>
-        <p>珍宝阁本身可以升级。升级后可以解锁更高品质宝物的制作权限。各品质宝物对应的珍宝阁解锁等级由配表配置，原型中以"珍宝阁 X 级解锁"标注。</p>
-        <h3 class="doc-h3">3.2 升级方式</h3>
-        <p>珍宝阁的升级方式（建设度/资源消耗/升级时间等）待定，另行说明。</p>
-        <h3 class="doc-h3">3.3 未解锁宝物的展示</h3>
-        <p>当珍宝阁等级不足时，对应品质的宝物在制作列表中以<b>半透明 + 锁图标 + "珍宝阁 X 级解锁"</b>文字展示，玩家可查看详情但无法发起制作。</p>
-      </div>
-
-      <div class="doc-chapter">
-        <h2 class="doc-h2">四、宝物体系</h2>
-        <h3 class="doc-h3">4.1 宝物分类</h3>
+        <h2 class="doc-h2">三、宝物体系</h2>
+        <h3 class="doc-h3">3.1 宝物分类</h3>
         <p>宝物共分 5 个类型：<b>武器、坐骑、令符、奇珍、宝典</b>。每种类型有 5 个品质等级，共计 25 种宝物。</p>
         <p style="color:#888;font-size:13px;font-family:'Microsoft YaHei',sans-serif;">📄 备注：每种类型各品质的具体宝物名称及对应图标，将在独立的《宝物名称与图标对照表》文档中提供，此处不作列举。</p>
-        <h3 class="doc-h3">4.2 品质体系</h3>
-        <p>品质由低到高依次为：<b>白色 → 绿色 → 蓝色 → 紫色 → 橙色</b>。品质决定宝物的基础属性上限、刻蚀品质上限、洗炼词条上限，以及解锁所需的珍宝阁等级。</p>
-        <h3 class="doc-h3">4.3 宝物属性</h3>
+        <h3 class="doc-h3">3.2 品质体系</h3>
+        <p>品质由低到高依次为：<b>白色 → 绿色 → 蓝色 → 紫色 → 橙色</b>。品质决定宝物的基础属性上限、注魂品质上限、洗炼词条上限，以及解锁所需的珍宝阁等级。</p>
+        <h3 class="doc-h3">3.3 宝物属性</h3>
         <p>每件宝物拥有若干条基础属性（如攻击、防御、带兵等），属性条数和数值随品质提升而增加，均为<b>固定值</b>，非随机生成。高品质宝物必然拥有低品质宝物的全部属性，并在此基础上增加新属性或提升数值。</p>
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2" id="doc-idle">五、珍宝阁主界面 <button class="doc-screen-btn" onclick="demoGo('idle')">&#9654; 查看原型</button></h2>
+        <h2 class="doc-h2" id="doc-idle">四、珍宝阁主界面 <button class="doc-screen-btn" onclick="demoGo('idle')">&#9654; 查看原型</button></h2>
         <p>主界面是进入宝物制作系统后的默认界面，根据珍宝阁当前状态分为三种显示模式。</p>
-        <h3 class="doc-h3">5.1 空闲状态</h3>
+        <h3 class="doc-h3">4.1 空闲状态</h3>
         <ul class="doc-list">
           <li>中央显示一个<b>「+」加号按钮</b>，点击后界面向左滑出，宝物选择界面从右侧滑入。</li>
           <li>顶栏显示标题<b>「宝物制作」</b>，右上角有<b>「?」</b>帮助按钮，点击打开帮助说明弹窗。</li>
           <li>底栏左侧有<b>返回</b>按钮，点击返回封地主界面；右侧有<b>「宝物分解」</b>按钮，无论当前是空闲、制作中还是完成待收取，均可点击进入分解界面。</li>
         </ul>
-        <h3 class="doc-h3" id="doc-forging">5.2 制作进行中 <button class="doc-screen-btn" onclick="demoGo('forging')">&#9654; 查看原型</button></h3>
+        <h3 class="doc-h3" id="doc-forging">4.2 制作进行中 <button class="doc-screen-btn" onclick="demoGo('forging')">&#9654; 查看原型</button></h3>
         <ul class="doc-list">
           <li>中央<b>锻造圆环</b>内显示目标宝物图标（品质边框 + 类型图标）。圆环播放锻造动画：两把锤子交替敲击 + 多层火花粒子 + 撞击闪光 + 热力光晕 + 烟雾效果。</li>
           <li>宝物名称显示于圆环正下方，属性信息在名称下方展示。</li>
@@ -1535,7 +1525,7 @@ body {
             </ul>
           </li>
         </ul>
-        <h3 class="doc-h3" id="doc-complete">5.3 完成收取 <button class="doc-screen-btn" onclick="demoGo('complete')">&#9654; 查看原型</button></h3>
+        <h3 class="doc-h3" id="doc-complete">4.3 完成收取 <button class="doc-screen-btn" onclick="demoGo('complete')">&#9654; 查看原型</button></h3>
         <ul class="doc-list">
           <li>锻造圆环停止旋转，播放<b>完成光效</b>：中心爆发光圈扩散 + 向外放射 12 道光芒。</li>
           <li>界面显示<b>「制作完成」</b>文字提示。</li>
@@ -1546,20 +1536,20 @@ body {
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2" id="doc-select">六、宝物制作 <button class="doc-screen-btn" onclick="demoGo('select')">&#9654; 查看原型</button></h2>
-        <h3 class="doc-h3">6.1 制作条件</h3>
+        <h2 class="doc-h2" id="doc-select">五、宝物制作 <button class="doc-screen-btn" onclick="demoGo('select')">&#9654; 查看原型</button></h2>
+        <h3 class="doc-h3">5.1 制作条件</h3>
         <ul class="doc-list">
           <li><b>珍宝阁等级</b>：部分高品质宝物需要珍宝阁达到一定等级才能解锁；未解锁宝物以半透明+锁图标+所需等级展示，不可发起制作。</li>
           <li><b>指定材料</b>：每件宝物的材料需求固定，材料不足时制作按钮不可点击。</li>
           <li><b>图纸</b>：消耗 1 张该宝物对应的图纸，图纸作为普通道具与其他材料一同在材料列表中展示。</li>
           <li>珍宝阁<b>没有正在进行的任务</b>；有任务时按钮置灰显示当前任务状态。</li>
         </ul>
-        <h3 class="doc-h3">6.2 宝物选择界面（制作模式）</h3>
+        <h3 class="doc-h3">5.2 宝物选择界面（制作模式）</h3>
         <ul class="doc-list">
           <li>界面分为左侧<b>宝物列表</b>和右侧<b>宝物详情</b>两栏布局。</li>
           <li>底部导航栏：左侧返回箭头。</li>
         </ul>
-        <h3 class="doc-h3">6.3 宝物列表规则</h3>
+        <h3 class="doc-h3">5.3 宝物列表规则</h3>
         <p>列表展示全部 25 件可制作宝物，排序逻辑（优先级由高到低）：</p>
         <ol class="doc-list">
           <li><b>材料充足可立即制作</b>：排最前，图标上显示绿色锤子标记。</li>
@@ -1567,17 +1557,17 @@ body {
           <li><b>未解锁（珍宝阁等级不足）</b>：半透明 + 锁图标 + 解锁所需等级文字。</li>
         </ol>
         <p>同优先级内，按品质从高到低，再按类型顺序排序。宝物图标左下角显示<b>当前持有数量</b>（数量≥1 时显示）。</p>
-        <h3 class="doc-h3">6.4 宝物详情面板</h3>
+        <h3 class="doc-h3">5.4 宝物详情面板</h3>
         <ul class="doc-list">
           <li>宝物品质边框 + 类型图标（大图）、宝物名称</li>
           <li>全部基础属性列表</li>
-          <li>刻蚀上限（该品质宝物可容纳的刻蚀品质上限）</li>
+          <li>注魂上限（该品质宝物可容纳的注魂品质上限）</li>
           <li>洗炼上限（该品质可开启的洗炼词条条数）</li>
           <li>材料需求列表（含图纸），点击任意道具图标 → 调用<b>通用道具弹窗</b>（外部组件）</li>
           <li>预计制作时间</li>
           <li><b>「制作宝物」</b>按钮：确认后立即扣除材料，界面滑回主界面并进入制作进行中状态</li>
         </ul>
-        <h3 class="doc-h3">6.5 制作完整流程</h3>
+        <h3 class="doc-h3">5.5 制作完整流程</h3>
         <p>点击「制作宝物」→ 扣除材料（含图纸）→ 主界面切换为进行中 → 倒计时结束 → 切换为完成状态 → 玩家点击「收取」→ 弹出通用道具获得界面 → 关闭后，宝物进入背包（数量+1），主界面回到空闲状态。</p>
       </div>
 
@@ -1609,7 +1599,7 @@ body {
           <li><b>宝物名称对比</b>：当前名称 → 强化后名称</li>
           <li>若武将正在佩戴该宝物，显示武将头像 + 武将名称</li>
           <li><b>属性对比</b>：每条属性显示「旧值 → 新值」，新值颜色高亮</li>
-          <li>刻蚀：显示当前宝物已有的刻蚀情况；强化后刻蚀不丢失，刻蚀品质上限随品质提升</li>
+          <li>注魂：显示当前宝物已有的注魂情况；强化后注魂不丢失，注魂品质上限随品质提升</li>
           <li>洗炼上限对比：旧上限条数 → 新上限条数</li>
           <li>材料需求（含图纸，<b>不包含</b>被消耗的低品质宝物本身）</li>
           <li>预计强化时间</li>
@@ -1623,40 +1613,40 @@ body {
       -->
 
       <div class="doc-chapter">
-        <h2 class="doc-h2">七、宝物刻蚀（与本系统的交互部分）</h2>
-        <p>刻蚀系统属于独立的子系统，本文档仅说明其与宝物制作系统的交互关系。</p>
-        <h3 class="doc-h3">7.1 刻蚀品质上限</h3>
-        <p>每件宝物有一个<b>刻蚀品质上限</b>，由宝物品质决定。在宝物制作的详情面板中，刻蚀行显示的是该宝物可容纳的刻蚀品质上限（白色宝物显示"白色"，绿色宝物显示"绿色"，依此类推）。</p>
-        <!-- 7.2 强化时刻蚀的继承（随强化功能一同移除，备份见 upgrade-removed.html） -->
+        <h2 class="doc-h2">六、宝物注魂（与本系统的交互部分）</h2>
+        <p>注魂系统属于独立的子系统，本文档仅说明其与宝物制作系统的交互关系。</p>
+        <h3 class="doc-h3">6.1 注魂品质上限</h3>
+        <p>每件宝物有一个<b>注魂品质上限</b>，由宝物品质决定。在宝物制作的详情面板中，注魂行显示的是该宝物可容纳的注魂品质上限（白色宝物显示"白色"，绿色宝物显示"绿色"，依此类推）。</p>
+        <!-- 6.2 强化时注魂的继承（随强化功能一同移除，备份见 upgrade-removed.html） -->
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2" id="doc-decompose">八、宝物分解 <button class="doc-screen-btn" onclick="demoGo('decompose')">&#9654; 查看原型</button></h2>
-        <h3 class="doc-h3">8.1 分解入口</h3>
+        <h2 class="doc-h2" id="doc-decompose">七、宝物分解 <button class="doc-screen-btn" onclick="demoGo('decompose')">&#9654; 查看原型</button></h2>
+        <h3 class="doc-h3">7.1 分解入口</h3>
         <p>入口位于宝物制作<b>主界面</b>底部导航栏右侧<b>「宝物分解」</b>按钮。无论当前是空闲、制作中还是完成待收取状态，均可点击进入。分解功能不占用珍宝阁任务槽，与制作互不影响。</p>
-        <h3 class="doc-h3">8.2 分解界面</h3>
+        <h3 class="doc-h3">7.2 分解界面</h3>
         <ul class="doc-list">
-          <li>以网格形式展示所有<b>可分解的宝物</b>：未被武将佩戴、无刻蚀、且持有数量≥1 的宝物。<b>有刻蚀的宝物不可分解</b>，不出现在分解列表中。</li>
+          <li>以网格形式展示所有<b>可分解的宝物</b>：未被武将佩戴、无注魂、且持有数量≥1 的宝物。<b>有注魂的宝物不可分解</b>，不出现在分解列表中。</li>
           <li>顶部<b>品质筛选下拉</b>：可选择分解品质范围。</li>
           <li>玩家<b>点击单件宝物</b>选中/取消选中，已选中宝物高亮显示。</li>
           <li><b>「一键选中」</b>按钮：按当前品质筛选，自动选中所有符合条件的宝物，最多 15 件。</li>
           <li>右侧实时显示<b>预计返还材料</b>列表（根据选中宝物累加计算）。</li>
         </ul>
-        <h3 class="doc-h3">8.3 确认分解</h3>
+        <h3 class="doc-h3">7.3 确认分解</h3>
         <ul class="doc-list">
           <li>点击<b>「分 解」</b>按钮后，所有选中宝物立即销毁，每件宝物返还的材料由配表决定，返还材料自动入背包。</li>
-          <li>被武将佩戴的宝物、有刻蚀的宝物均不出现在分解列表，无法被选中。</li>
+          <li>被武将佩戴的宝物、有注魂的宝物均不出现在分解列表，无法被选中。</li>
           <li>分解操作<b>不可撤销</b>，执行前需玩家确认。</li>
         </ul>
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2" id="doc-help">九、帮助弹窗 <button class="doc-screen-btn" onclick="demoGo('help')">&#9654; 查看原型</button></h2>
+        <h2 class="doc-h2" id="doc-help">八、帮助弹窗 <button class="doc-screen-btn" onclick="demoGo('help')">&#9654; 查看原型</button></h2>
         <p>点击主界面或宝物选择界面右上角<b>「?」</b>按钮，弹出帮助说明弹窗，覆盖当前界面。弹窗以纯文字形式说明本系统基本操作，供玩家快速查阅。弹窗可随时关闭，返回原界面，不影响当前任务状态。</p>
       </div>
 
       <div class="doc-chapter">
-        <h2 class="doc-h2">十、通用规则与限制</h2>
+        <h2 class="doc-h2">九、通用规则与限制</h2>
         <ul class="doc-list">
           <li>珍宝阁<b>同时只能进行一个</b>制作任务。</li>
           <li>分解操作不占用任务槽，可在制作期间操作。</li>
@@ -1796,7 +1786,7 @@ body {
     </div>
     <div class="decompose-body">
       <div class="decompose-equip-area">
-        <div class="area-title">选择要分解的宝物（已刻蚀的宝物不可分解）</div>
+        <div class="area-title">选择要分解的宝物（已注魂的宝物不可分解）</div>
         <div class="decompose-grid" id="decomposeGrid"></div>
       </div>
       <div class="decompose-result-area">
@@ -2262,7 +2252,7 @@ function renderEquipList() {
   }).join('');
 }
 
-// ============ 属性/刻蚀/洗炼 渲染辅助 ============
+// ============ 属性/注魂/洗炼 渲染辅助 ============
 function renderAttrsHtml(attrs) {
   return '<div class="detail-attrs">' + attrs.map(a =>
     '<div class="detail-attr-row"><span class="attr-label">'+a.l+'</span><span class="attr-value">'+a.v+'</span></div>'
@@ -2289,17 +2279,17 @@ const ETCH_QUALITY_LABEL = {green:'绿色品质',blue:'蓝色品质',purple:'紫
 const QUALITY_NAME = {white:'白色',green:'绿色',blue:'蓝色',purple:'紫色',orange:'橙色',red:'红色'};
 function renderEtchLimitLine(quality) {
   var qName = QUALITY_NAME[quality] || '白色';
-  return '<div class="etch-info-line"><span class="etch-info-label">刻蚀上限</span><span class="etch-info-value">'+qName+'</span></div>';
+  return '<div class="etch-info-line"><span class="etch-info-label">注魂上限</span><span class="etch-info-value">'+qName+'</span></div>';
 }
 function renderEtchInfoLine(etchings, quality) {
   if (!etchings || etchings.length === 0) {
-    return '<div class="etch-info-line"><span class="etch-info-label">刻蚀</span><span class="etch-info-value empty">暂无刻蚀</span></div>';
+    return '<div class="etch-info-line"><span class="etch-info-label">注魂</span><span class="etch-info-value empty">暂无注魂</span></div>';
   }
   var e = etchings[0];
   var nextQ = ETCH_NEXT_QUALITY[quality] || 'green';
   var label = ETCH_QUALITY_LABEL[nextQ] || '绿色品质';
   return '<div class="etch-info-line">' +
-    '<span class="etch-info-left"><span class="etch-icon-box" title="'+e.n+'" onclick="showToast(\'打开刻蚀属性界面\')">'+e.i+'</span></span>' +
+    '<span class="etch-info-left"><span class="etch-icon-box" title="'+e.n+'" onclick="showToast(\'打开注魂属性界面\')">'+e.i+'</span></span>' +
     '<span class="etch-info-value">可以强化到'+label+'</span>' +
     '</div>';
 }
@@ -2740,7 +2730,7 @@ var DEMO_DESCS = {
   idle: '<ul><li>界面展示珍宝阁场景，中央显示<b>「+」</b>按钮</li><li>点击「+」→ 滑入<b>宝物选择界面</b></li><li>顶栏标题<b>「宝物制作」</b>，右上角<b>「?」</b>按钮打开帮助弹窗</li><li>底栏左侧<b>返回</b>按钮 → 返回主城，右侧<b>「宝物分解」</b>按钮 → 开启分解界面</li></ul>',
   forging: '<ul><li>中央制作圆环内显示宝物图标</li><li>CSS动画特效：锤子交替敲打 + 多层火花粒子 + 撞击闪光 + 热力光环 + 烟雾上升</li><li>下方<b>进度条</b>实时倒计时</li><li>显示<b>「制作列表」</b>→ 回到宝物选择（不中断进度）</li><li><b>「加速制作」</b>→ 调用<b>通用加速弹窗</b>（外部通用组件），加速后立即完成</li></ul>',
   complete: '<ul><li>圆环停止旋转，触发<b>完成光效</b>（爆发光 + 12道放射光芒）</li><li>显示「制作完成」提示文字</li><li><b>「收 取」</b>按钮 → 宝物入包，界面回到空闲状态</li><li>对应宝物数量 +1，可在选择列表中查看</li></ul>',
-  select: '<ul><li>左右分栏布局，左侧宝物列表 + 右侧宝物详情</li><li>列表排序规则：<b>可制作 → 已解锁 → 未解锁</b>，同状态按品质、类型排序</li><li><span style="color:#4a4">绿色锤子图标</span> 表示材料充足可直接制作</li><li>锁定宝物显示半透明 + 锁图标 + 解锁等级</li><li>右侧显示品质边框、名称、多条属性、<b>刻蚀上限</b>、洗炼上限、材料需求、制作按钮</li><li>点击材料图标 → 调用<b>通用道具弹窗</b>（外部通用组件）</li></ul>',
+  select: '<ul><li>左右分栏布局，左侧宝物列表 + 右侧宝物详情</li><li>列表排序规则：<b>可制作 → 已解锁 → 未解锁</b>，同状态按品质、类型排序</li><li><span style="color:#4a4">绿色锤子图标</span> 表示材料充足可直接制作</li><li>锁定宝物显示半透明 + 锁图标 + 解锁等级</li><li>右侧显示品质边框、名称、多条属性、<b>注魂上限</b>、洗炼上限、材料需求、制作按钮</li><li>点击材料图标 → 调用<b>通用道具弹窗</b>（外部通用组件）</li></ul>',
   /* 'select-upgrade': 已移除（2026-04-22） */
   help: '',
   decompose: '<ul><li>从主界面底栏<b>「宝物分解」</b>进入，再制作中/完成待收取时同样可用</li><li>网格显示可分解的闲置宝物，可按品质筛选</li><li><b>一键选择</b>：按当前筛选品质自动选中最多15件</li><li>右侧显示<b>预计返还</b>的材料数量</li><li>确认分解后宝物销毁、材料入包</li></ul>'
