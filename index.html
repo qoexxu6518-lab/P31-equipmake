@@ -1471,6 +1471,7 @@ body {
         <button class="doc-nav-btn" data-screen="select" onclick="demoGo('select');scrollDocTo('select')">宝物选择·制作</button>
         <button class="doc-nav-btn" data-screen="decompose" onclick="demoGo('decompose');scrollDocTo('decompose')">宝物分解</button>
         <button class="doc-nav-btn" data-screen="help" onclick="demoGo('help');scrollDocTo('help')">帮助弹窗</button>
+        <button class="doc-nav-btn" onclick="scrollDocTo('fx')" style="border-color:#a06030;color:#e8a060;">动效需求</button>
       </div>
     </div>
     <div class="doc-body">
@@ -1657,6 +1658,75 @@ body {
           <li>所有制作进度均为<b>真实倒计时</b>，玩家离线后继续计时，下次进入自动刷新状态。</li>
           <li>图纸作为普通消耗道具，由道具背包系统管理，制作时扣除背包中对应图纸数量。</li>
           <li>宝物持有数量无上限。</li>
+        </ul>
+      </div>
+
+      <!-- ============ 十、动效需求 ============ -->
+      <div class="doc-chapter" id="doc-fx-chapter">
+        <h2 class="doc-h2" id="doc-fx">十、动效需求</h2>
+        <p>本章面向动效 / 特效制作人员。整套系统的动效全部集中在<b>「珍宝阁主界面」</b>的中央锻造区域，共分 <b>3 个状态</b>。具体的实现方式（粒子系统 / 序列帧 / Spine / Live2D 等）由动效团队自行决定，本文档只描述<b>每个状态需要呈现的视觉感受</b>，参数、时长仅作演示参考，最终以引擎实装效果为准。</p>
+        <p style="color:#7a6840;font-size:13px;">下方每个动效条目都提供 <b>「跳转查看」</b> 与 <b>「重新播放」</b> 按钮：「跳转查看」会切换中央原型容器到对应界面（不改变右侧的旧 UI 对比面板）；「重新播放」会在中央原型上重新触发一次该动效。</p>
+
+        <h3 class="doc-h3">10.1 三个状态总览</h3>
+        <table class="doc-table" style="width:100%;border-collapse:collapse;margin-top:8px;font-size:13px;">
+          <thead>
+            <tr style="background:#e8e2d0;">
+              <th style="border:1px solid #c8b890;padding:6px 8px;text-align:left;width:90px;">状态</th>
+              <th style="border:1px solid #c8b890;padding:6px 8px;text-align:left;">视觉特征（一句话）</th>
+              <th style="border:1px solid #c8b890;padding:6px 8px;text-align:left;width:120px;">动效</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border:1px solid #c8b890;padding:6px 8px;"><b>A. 空闲</b></td>
+              <td style="border:1px solid #c8b890;padding:6px 8px;">中央显示一个金色"+"按钮，整体安静无打造氛围。</td>
+              <td style="border:1px solid #c8b890;padding:6px 8px;color:#888;">无动效</td>
+            </tr>
+            <tr style="background:#f0ebd8;">
+              <td style="border:1px solid #c8b890;padding:6px 8px;"><b>B. 打造中</b></td>
+              <td style="border:1px solid #c8b890;padding:6px 8px;">圆形铁砧炉中央显示宝物图标，左右两把锤子交替敲击，伴随火花四溅、撞击闪光、热力光晕、缕缕青烟。整体氛围"火热、忙碌"。</td>
+              <td style="border:1px solid #c8b890;padding:6px 8px;">循环动效</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid #c8b890;padding:6px 8px;"><b>C. 完成</b></td>
+              <td style="border:1px solid #c8b890;padding:6px 8px;">锤击与火花停止；圆环中央炸开一圈金色光圈，向外辐射出 12 道金色光芒，宝物图标定格。整体氛围"高光、出炉"。</td>
+              <td style="border:1px solid #c8b890;padding:6px 8px;">一次性动效</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="doc-h3">10.2 「打造中」综合动效 <button class="doc-screen-btn" onclick="demoGo('forging')">&#9654; 跳转查看</button> <button class="doc-screen-btn" onclick="playForgingFx()">&#9658; 重新播放</button></h3>
+        <p>该状态下所有元素<b>同时呈现</b>，构成一段持续循环的"打铁"画面。可以理解为一个综合动效，包含以下 5 个组成元素：</p>
+        <ul class="doc-list">
+          <li><b>双锤交替敲击</b>：圆环左右各一把锤子，左右错峰敲击，节奏明确（"咚-咚-咚"）。</li>
+          <li><b>火花飞溅</b>：每次锤子落下，从圆环中心向四周炸出大量金色 / 橙色 / 红色火花，远端逐渐熄灭。</li>
+          <li><b>撞击闪光</b>：每次敲击瞬间，中央亮起一圈白金色光斑，快速亮起又收回，强化"击中"反馈。</li>
+          <li><b>热力光晕</b>：圆环外围一层柔和的橙红色光晕，缓慢呼吸（明—暗—明），表现炉火高温。</li>
+          <li><b>烟雾上升</b>：圆环底部不时升起几缕半透明青烟，向上飘散后消失，营造铁匠铺氛围。</li>
+        </ul>
+        <p style="color:#7a6840;font-size:13px;">▸ <b>关键氛围</b>：节奏感（与锤击同步）、火热感（暖色系为主）、忙碌感（多元素同时运动但不杂乱）。允许根据宝物品质做差异化（高品质打造时火花更密、光晕更亮），具体方案由动效团队自定。</p>
+
+        <h3 class="doc-h3">10.3 「完成」综合动效 <button class="doc-screen-btn" onclick="demoGo('complete')">&#9654; 跳转查看</button> <button class="doc-screen-btn" onclick="playCompleteFx()">&#9658; 重新播放</button></h3>
+        <p>从"打造中"切换到"完成"的瞬间，所有循环动效立即停止，紧接着触发一次性的"出炉"光效，包含以下 2 个组成元素：</p>
+        <ul class="doc-list">
+          <li><b>爆发光圈</b>：圆环中心炸开一圈饱满的金色高亮光圈，由内向外快速扩散后渐隐，整个过程约 1 秒，带强烈"完成感"。</li>
+          <li><b>放射光芒</b>：紧随光圈，向四周辐射出 12 道金色光柱（每 30° 一道），出现后短暂保留作为完成态的环境光。</li>
+        </ul>
+        <p style="color:#7a6840;font-size:13px;">▸ <b>关键氛围</b>：成就感、神圣感。光效结束后，宝物图标静态停留在圆环中央，下方显示"制作完成"文字与"收取"按钮，等待玩家操作。可考虑配合一次轻微的镜头/界面震动，强化高品质宝物的高光时刻。</p>
+
+        <h3 class="doc-h3">10.4 状态切换时机</h3>
+        <ul class="doc-list">
+          <li><b>A → B</b>：玩家在「宝物选择」界面点击「制作宝物」按钮后，界面回到主界面，立即进入打造中状态，循环动效开始。</li>
+          <li><b>B → C</b>：倒计时归零的瞬间（或玩家点击加速、加速后任务结束的瞬间），打造中循环动效全部停止，立即播放完成动效。</li>
+          <li><b>C → A</b>：玩家点击「收取」按钮后，完成动效残留全部清理，回到空闲状态。</li>
+        </ul>
+
+        <h3 class="doc-h3">10.5 通用约束</h3>
+        <ul class="doc-list">
+          <li>动效全部局限在中央<b>圆形铁砧炉区域内</b>，不要溢出到顶/底栏与列表。</li>
+          <li>同屏粒子建议控制在合理数量内（参考值：≤ 30 个），避免影响中低端机性能。</li>
+          <li>正式版本预留<b>"低性能模式"</b>开关：开启时可关闭粒子、烟雾、光晕等装饰类动效，仅保留双锤敲击与完成爆发两项核心。</li>
+          <li>所有循环动效在状态切换时必须能立即停止，不能残留在 DOM 中持续消耗资源。</li>
         </ul>
       </div>
 
@@ -2407,6 +2477,29 @@ function clearEffects() {
   const c = document.getElementById('sparksContainer'); if(c) c.innerHTML='';
   const r = document.getElementById('forgeRing'); if(r) r.querySelectorAll('.smoke').forEach(s=>s.remove());
   const y = document.getElementById('completeRays'); if(y) y.innerHTML='';
+}
+
+// ============ 动效需求章节：演示播放函数 ============
+// 重新播放"打造中"循环动效：若不在打造中，先跳转过去；若已在，重启循环
+function playForgingFx() {
+  if (!isForging || isForgeComplete) { demoGo('forging'); return; }
+  const ring = document.getElementById('forgeRing');
+  ring.classList.remove('spinning');
+  void ring.offsetWidth; // 触发 reflow，重启 CSS 动画
+  ring.classList.add('spinning');
+  clearEffects();
+  generateSparks();
+  generateSmoke();
+}
+// 重新播放"完成"一次性动效：若不在完成态，先跳转过去；若已在，重新触发爆发与光芒
+function playCompleteFx() {
+  if (!isForging || !isForgeComplete) { demoGo('complete'); return; }
+  const ring = document.getElementById('forgeRing');
+  ring.classList.remove('complete');
+  document.getElementById('completeRays').innerHTML = '';
+  void ring.offsetWidth;
+  ring.classList.add('complete');
+  generateRays();
 }
 
 // ============ 制作/强化流程 ============
