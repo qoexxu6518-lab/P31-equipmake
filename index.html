@@ -1391,7 +1391,7 @@ body {
 .decompose-result-item .mat-name { font-size: 10px; color: #d4c4a0; }
 .decompose-result-item .mat-count { font-size: 11px; color: #44cc44; font-weight: bold; }
 
-/* 分解操作栏（按钮同行等大，下拉仅在自动选中上方） */
+/* 分解操作栏（按钮同行等大） */
 .decompose-action-bar {
   display: flex; gap: 10px;
   padding: 8px 12px; flex-shrink: 0; align-items: flex-end;
@@ -1403,41 +1403,15 @@ body {
   padding: 12px 0; border-radius: 4px; font-size: 18px;
   cursor: pointer; letter-spacing: 2px; font-family: inherit;
 }
-.decompose-action-col .quality-dropdown {
-  align-self: center; width: auto;
-}
 .auto-select-btn {
   border: none; background: url('btn_cyan.png') center/100% 100% no-repeat;
   color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.6);
 }
+.auto-select-btn:disabled { opacity: 0.65; cursor: default; }
 .decompose-confirm-btn {
   border: none; background: url('btn_brown.png') center/100% 100% no-repeat;
   color: #ffe8b0; font-weight: bold; text-shadow: 0 1px 2px rgba(0,0,0,0.6);
 }
-/* 品质上拉下拉框 */
-.quality-dropdown {
-  position: relative; display: inline-block;
-}
-.quality-dropdown-btn {
-  padding: 6px 14px; border-radius: 4px;
-  border: 1px solid #b8a878; background: rgba(200,180,140,0.2);
-  color: #d4c4a0; font-size: 13px; cursor: pointer; font-family: inherit;
-  white-space: nowrap;
-}
-.quality-dropdown-btn::after { content: ' ▲'; font-size: 10px; }
-.quality-dropdown-menu {
-  position: absolute; bottom: 100%; left: 0; right: 0;
-  background: #3a3020; border: 1px solid #b8a878; border-radius: 4px;
-  display: none; flex-direction: column; z-index: 10;
-  margin-bottom: 2px;
-}
-.quality-dropdown-menu.open { display: flex; }
-.quality-dropdown-option {
-  padding: 6px 12px; font-size: 13px; color: #d4c4a0;
-  cursor: pointer; border: none; background: none; text-align: left; font-family: inherit;
-}
-.quality-dropdown-option:hover { background: rgba(200,180,140,0.25); }
-.quality-dropdown-option.selected { color: #44cc44; }
 /* 分解底部栏（仅返回按钮）*/
 .decompose-bottom {
   padding: 8px 12px; flex-shrink: 0;
@@ -1628,9 +1602,9 @@ body {
         <h3 class="doc-h3">7.2 分解界面</h3>
         <ul class="doc-list">
           <li>以网格形式展示所有<b>可分解的宝物</b>：未被武将佩戴、无注魂、且持有数量≥1 的宝物。<b>有注魂的宝物不可分解</b>，不出现在分解列表中。</li>
-          <li>顶部<b>品质筛选下拉</b>：可选择分解品质范围。</li>
           <li>玩家<b>点击单件宝物</b>选中/取消选中，已选中宝物高亮显示。</li>
-          <li><b>「一键选中」</b>按钮：按当前品质筛选，自动选中所有符合条件的宝物，最多 15 件。</li>
+          <li><b>「自动选中」</b>按钮：每次点击从当前未选中的最低品质宝物中选中最多 10 件；若该品质不足 10 件，只选中该品质，不跨品质补足。</li>
+          <li>首次点击后按钮文字变为<b>「继续选中」</b>；再次点击继续按最低未选品质分批选中，直到全部选完。</li>
           <li>右侧实时显示<b>预计返还材料</b>列表（根据选中宝物累加计算）。</li>
         </ul>
         <h3 class="doc-h3">7.3 确认分解</h3>
@@ -1865,16 +1839,7 @@ body {
       </div>
       <div class="decompose-action-bar">
         <div class="decompose-action-col">
-          <div class="quality-dropdown" id="qualityDropdown">
-            <button class="quality-dropdown-btn" id="qualityDropdownBtn" onclick="toggleQualityDropdown()">白色及以下</button>
-            <div class="quality-dropdown-menu" id="qualityDropdownMenu">
-              <button class="quality-dropdown-option selected" onclick="selectDropdownQuality('white')">白色及以下</button>
-              <button class="quality-dropdown-option" onclick="selectDropdownQuality('green')">绿色及以下</button>
-              <button class="quality-dropdown-option" onclick="selectDropdownQuality('blue')">蓝色及以下</button>
-              <button class="quality-dropdown-option" onclick="selectDropdownQuality('purple')">紫色及以下</button>
-            </div>
-          </div>
-          <button class="auto-select-btn" onclick="autoSelectDecompose()">自动选中</button>
+          <button class="auto-select-btn" id="autoSelectBtn" onclick="autoSelectDecompose()">自动选中</button>
         </div>
         <div class="decompose-action-col">
           <button class="decompose-confirm-btn" onclick="confirmDecompose()" style="flex:1">分 解</button>
@@ -2692,7 +2657,7 @@ function resetHeroFilter() {
 
 // ============ 宝物分解 ============
 let decomposeSelected = new Set();
-let decomposeQualityFilter = '';
+const DECOMPOSE_AUTO_SELECT_COUNT = 10;
 const DECOMPOSE_ITEMS = [
   { id:'d1', name:'太一刀', type:'weapon', quality:'white', icon:'equip_sword.png' },
   { id:'d2', name:'精铁刀', type:'weapon', quality:'green', icon:'equip_sword.png' },
@@ -2716,15 +2681,13 @@ const DECOMPOSE_ITEMS = [
 
 function openDecompose() {
   decomposeSelected.clear();
-  decomposeQualityFilter = 'white';
   document.getElementById('decomposeScreen').classList.add('active');
   renderDecomposeGrid();
   renderDecomposeResult();
-  updateQualityDropdown();
+  updateAutoSelectButton();
 }
 function closeDecompose() {
   document.getElementById('decomposeScreen').classList.remove('active');
-  closeQualityDropdown();
 }
 function renderDecomposeGrid() {
   const grid = document.getElementById('decomposeGrid');
@@ -2746,35 +2709,43 @@ function toggleDecomposeItem(id) {
   else decomposeSelected.add(id);
   renderDecomposeGrid();
   renderDecomposeResult();
-}
-function toggleQualityDropdown() {
-  document.getElementById('qualityDropdownMenu').classList.toggle('open');
-}
-function closeQualityDropdown() {
-  document.getElementById('qualityDropdownMenu').classList.remove('open');
-}
-const QUALITY_DROPDOWN_LABELS = {white:'白色及以下',green:'绿色及以下',blue:'蓝色及以下',purple:'紫色及以下'};
-function selectDropdownQuality(q) {
-  decomposeQualityFilter = q;
-  closeQualityDropdown();
-  updateQualityDropdown();
-}
-function updateQualityDropdown() {
-  document.getElementById('qualityDropdownBtn').textContent = QUALITY_DROPDOWN_LABELS[decomposeQualityFilter] || '白色及以下';
-  document.querySelectorAll('.quality-dropdown-option').forEach(o => {
-    o.classList.toggle('selected', o.textContent === QUALITY_DROPDOWN_LABELS[decomposeQualityFilter]);
-  });
+  updateAutoSelectButton();
 }
 function autoSelectDecompose() {
-  decomposeSelected.clear();
-  let items = DECOMPOSE_ITEMS;
-  if (decomposeQualityFilter) {
-    const maxIdx = QUALITY_ORDER.indexOf(decomposeQualityFilter);
-    items = items.filter(i => QUALITY_ORDER.indexOf(i.quality) <= maxIdx);
+  const unselected = DECOMPOSE_ITEMS.slice()
+    .sort((a, b) => {
+      const qi = QUALITY_ORDER.indexOf(a.quality) - QUALITY_ORDER.indexOf(b.quality);
+      if (qi !== 0) return qi;
+      return TYPE_ORDER.indexOf(a.type) - TYPE_ORDER.indexOf(b.type);
+    })
+    .filter(i => !decomposeSelected.has(i.id));
+  if (unselected.length === 0) {
+    showToast('已全部选中');
+    updateAutoSelectButton();
+    return;
   }
-  items.slice(0, 15).forEach(i => decomposeSelected.add(i.id));
+  const lowestQuality = unselected[0].quality;
+  unselected
+    .filter(i => i.quality === lowestQuality)
+    .slice(0, DECOMPOSE_AUTO_SELECT_COUNT)
+    .forEach(i => decomposeSelected.add(i.id));
   renderDecomposeGrid();
   renderDecomposeResult();
+  updateAutoSelectButton();
+}
+function updateAutoSelectButton() {
+  const btn = document.getElementById('autoSelectBtn');
+  if (!btn) return;
+  if (decomposeSelected.size === 0) {
+    btn.textContent = '自动选中';
+    btn.disabled = false;
+  } else if (decomposeSelected.size >= DECOMPOSE_ITEMS.length) {
+    btn.textContent = '已全部选中';
+    btn.disabled = true;
+  } else {
+    btn.textContent = '继续选中';
+    btn.disabled = false;
+  }
 }
 function renderDecomposeResult() {
   const el = document.getElementById('decomposeResult');
@@ -2807,6 +2778,7 @@ function confirmDecompose() {
   decomposeSelected.clear();
   renderDecomposeGrid();
   renderDecomposeResult();
+  updateAutoSelectButton();
 }
 
 // ============ Demo 演示导航 ============
@@ -2826,7 +2798,7 @@ var DEMO_DESCS = {
   select: '<ul><li>左右分栏布局，左侧宝物列表 + 右侧宝物详情</li><li>列表排序规则：<b>可制作 → 已解锁 → 未解锁</b>，同状态按品质、类型排序</li><li><span style="color:#4a4">绿色锤子图标</span> 表示材料充足可直接制作</li><li>锁定宝物显示半透明 + 锁图标 + 解锁等级</li><li>右侧显示品质边框、名称、多条属性、<b>注魂上限</b>、洗炼上限、材料需求、制作按钮</li><li>点击材料图标 → 调用<b>通用道具弹窗</b>（外部通用组件）</li></ul>',
   /* 'select-upgrade': 已移除（2026-04-22） */
   help: '',
-  decompose: '<ul><li>从主界面底栏<b>「宝物分解」</b>进入，再制作中/完成待收取时同样可用</li><li>网格显示可分解的闲置宝物，可按品质筛选</li><li><b>一键选择</b>：按当前筛选品质自动选中最多15件</li><li>右侧显示<b>预计返还</b>的材料数量</li><li>确认分解后宝物销毁、材料入包</li></ul>'
+  decompose: '<ul><li>从主界面底栏<b>「宝物分解」</b>进入，制作中/完成待收取时同样可用</li><li>网格显示可分解的闲置宝物，不再提供品质筛选下拉</li><li><b>自动选中</b>：每次从最低未选品质中选中最多10件；若该品质不足10件，只选该品质，不跨品质补足</li><li>首次点击后按钮文字变为<b>「继续选中」</b>，继续按品质批次选择</li><li>右侧显示<b>预计返还</b>的材料数量</li><li>确认分解后宝物销毁、材料入包</li></ul>'
 };
 
 function scrollDocTo(id) {
